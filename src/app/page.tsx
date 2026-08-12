@@ -71,7 +71,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-16 md:py-20 bg-lilac-50/50">
+      <section className="py-16 md:py-20 bg-lilac-50/50 bg-dots">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-end justify-between mb-10">
             <div>
@@ -105,15 +105,18 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="py-16 md:py-20">
+      <section className="py-16 md:py-20 bg-cream">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="rounded-3xl bg-gradient-to-r from-lilac-600 to-lilac-800 p-8 md:p-12 text-center text-white">
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
-              Free Shipping on Orders Over $75
-            </h2>
-            <p className="mt-2 text-sm sm:text-base text-lilac-200">
-              Plus, easy 30-day returns on all items.
-            </p>
+          <div className="relative rounded-3xl bg-gradient-to-r from-lilac-600 to-lilac-800 overflow-hidden">
+            <div className="absolute inset-0 bg-dots-white" />
+            <div className="relative p-8 md:p-12 text-center text-white">
+              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
+                Free Shipping on Orders Over $75
+              </h2>
+              <p className="mt-2 text-sm sm:text-base text-lilac-200">
+                Plus, easy 30-day returns on all items.
+              </p>
+            </div>
           </div>
         </div>
       </section>

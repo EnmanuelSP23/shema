@@ -15,7 +15,7 @@ export default function Header() {
   const [cartCount] = useState(0);
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-lilac-100">
+    <header className="sticky top-0 z-50 bg-cream/95 backdrop-blur-sm border-b border-lilac-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           <Link href="/" className="flex items-center gap-2">
@@ -67,7 +67,7 @@ export default function Header() {
       </div>
 
       {isOpen && (
-        <div className="md:hidden border-t border-lilac-100 bg-white">
+        <div className="md:hidden border-t border-lilac-100 bg-cream">
           <div className="px-4 py-4 space-y-3">
             {navLinks.map((link) => (
               <Link

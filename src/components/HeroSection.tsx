@@ -2,11 +2,12 @@ import Link from "next/link";
 
 export default function HeroSection() {
   return (
-    <section className="relative bg-gradient-to-br from-lilac-50 via-white to-blush overflow-hidden">
+    <section className="relative bg-gradient-to-br from-lilac-50 via-cream to-blush overflow-hidden">
       <div className="absolute inset-0 opacity-30">
         <div className="absolute top-10 left-10 w-72 h-72 rounded-full bg-lilac-200 blur-3xl" />
         <div className="absolute bottom-10 right-10 w-96 h-96 rounded-full bg-rose-gold blur-3xl" />
       </div>
+      <div className="absolute inset-0 bg-floral" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
         <div className="max-w-2xl">
