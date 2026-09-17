@@ -1,51 +1,187 @@
-import ProductCard from "@/components/ProductCard";
+"use client";
 
-const products = [
-  { name: "Velvet Matte Lipstick", category: "Makeup", price: "$24.00", image: "linear-gradient(135deg, #c084fc, #7c2fba)", badge: "Best Seller" },
-  { name: "Silk Chemise", category: "Clothing", price: "$68.00", image: "linear-gradient(135deg, #f3e8ff, #e8b4b8)", badge: "New" },
-  { name: "Radiance Serum", category: "Skincare", price: "$42.00", image: "linear-gradient(135deg, #fdf2f8, #c084fc)", badge: null },
-  { name: "Lace Bralette Set", category: "Clothing", price: "$54.00", image: "linear-gradient(135deg, #e9d5ff, #d8b4fe)", badge: "Trending" },
-  { name: "Satin Eye Shadow Palette", category: "Makeup", price: "$38.00", image: "linear-gradient(135deg, #d8b4fe, #6b21a8)", badge: null },
-  { name: "Cashmere Robe", category: "Clothing", price: "$89.00", image: "linear-gradient(135deg, #f3e8ff, #c084fc)", badge: "Luxury" },
-  { name: "Hydrating Face Mist", category: "Skincare", price: "$18.00", image: "linear-gradient(135deg, #e9d5ff, #fdf2f8)", badge: null },
-  { name: "Crystal Hair Clip", category: "Accessories", price: "$16.00", image: "linear-gradient(135deg, #faf5ff, #d8b4fe)", badge: null },
+import { useState, useMemo } from "react";
+import ProductCard from "@/components/ProductCard";
+import products from "@/data/products.json";
+import { Product, Category } from "@/types";
+
+const categories: Category[] = [
+  "Lip Gloss",
+  "Lip Stain",
+  "Lip Care",
+  "Contour",
+  "Mascara",
+  "Eyeliner",
+  "Blush",
+  "Foundation",
+  "Body Care",
+  "Fragrance",
+  "Accessories",
+  "Apparel",
+  "Gift Set",
 ];
 
-const categories = ["All", "Makeup", "Clothing", "Skincare", "Accessories"];
+const brands = ["Sephora Collection", "Victoria's Secret", "Juicy Couture", "Givenchy", "Dolce & Gabbana"];
 
 export default function ProductsPage() {
+  const [selectedCategory, setSelectedCategory] = useState<Category | "">("");
+  const [selectedBrand, setSelectedBrand] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [sortBy, setSortBy] = useState<"price-asc" | "price-desc" | "name">("name");
+
+  const filteredProducts = useMemo(() => {
+    let result = [...products] as Product[];
+
+    if (selectedCategory) {
+      result = result.filter((p) => p.category === selectedCategory);
+    }
+
+    if (selectedBrand) {
+      result = result.filter((p) => p.brand === selectedBrand);
+    }
+
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(
+        (p) =>
+          p.name.toLowerCase().includes(query) ||
+          p.brand.toLowerCase().includes(query) ||
+          p.description.toLowerCase().includes(query)
+      );
+    }
+
+    switch (sortBy) {
+      case "price-asc":
+        result.sort((a, b) => a.price - b.price);
+        break;
+      case "price-desc":
+        result.sort((a, b) => b.price - a.price);
+        break;
+      case "name":
+        result.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+    }
+
+    return result;
+  }, [selectedCategory, selectedBrand, searchQuery, sortBy]);
+
   return (
-    <div className="py-12 md:py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
-          <span className="inline-block px-3 py-1 rounded-full bg-lilac-100 text-lilac-600 text-xs font-semibold uppercase tracking-wider mb-4">
-            Our Collection
-          </span>
-          <h1 className="text-3xl sm:text-4xl font-bold text-dark tracking-tight">
-            All Products
+    <div className="bg-pink-100 min-h-screen">
+      <div className="container mx-auto px-4 py-6">
+        {/* Header */}
+        <div className="text-center mb-6">
+          <h1 className="text-3xl font-bold text-primary mb-2 uppercase">
+            Our Products
           </h1>
+          <p className="text-primary">
+            Explore our collection of premium makeup and beauty products
+          </p>
         </div>
 
-        <div className="flex flex-wrap justify-center gap-2 mb-10">
-          {categories.map((cat) => (
+        {/* Filters */}
+        <div className="bg-pink-50 p-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {/* Search */}
+            <div>
+              <label className="block text-sm font-bold text-primary mb-1">
+                Search
+              </label>
+              <input
+                type="text"
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-4 py-2 border border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              />
+            </div>
+
+            {/* Category Filter */}
+            <div>
+              <label className="block text-sm font-bold text-primary mb-1">
+                Category
+              </label>
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value as Category | "")}
+                className="w-full px-4 py-2 border border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="">All Categories</option>
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Brand Filter */}
+            <div>
+              <label className="block text-sm font-bold text-primary mb-1">
+                Brand
+              </label>
+              <select
+                value={selectedBrand}
+                onChange={(e) => setSelectedBrand(e.target.value)}
+                className="w-full px-4 py-2 border border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="">All Brands</option>
+                {brands.map((brand) => (
+                  <option key={brand} value={brand}>
+                    {brand}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Sort */}
+            <div>
+              <label className="block text-sm font-bold text-primary mb-1">
+                Sort By
+              </label>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+                className="w-full px-4 py-2 border border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="name">Name (A-Z)</option>
+                <option value="price-asc">Price (Low to High)</option>
+                <option value="price-desc">Price (High to Low)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        {/* Results Count */}
+        <div className="mb-6">
+          <p className="text-primary font-bold">
+            Showing {filteredProducts.length} of {products.length} products
+          </p>
+        </div>
+
+        {/* Products List - Catalog Style */}
+        {filteredProducts.length > 0 ? (
+          <div className="space-y-0">
+            {filteredProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-primary text-lg">
+              No products found matching your criteria.
+            </p>
             <button
-              key={cat}
-              className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${
-                cat === "All"
-                  ? "bg-lilac-600 text-white"
-                  : "bg-lilac-50 text-lilac-700 hover:bg-lilac-100"
-              }`}
+              onClick={() => {
+                setSelectedCategory("");
+                setSelectedBrand("");
+                setSearchQuery("");
+              }}
+              className="mt-4 text-primary hover:text-dark-rose underline font-bold"
             >
-              {cat}
+              Clear filters
             </button>
-          ))}
-        </div>
-
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {products.map(({ name, category, price, image, badge }) => (
-            <ProductCard key={name} name={name} category={category} price={price} image={image} badge={badge ?? undefined} />
-          ))}
-        </div>
+          </div>
+        )}
       </div>
     </div>
   );

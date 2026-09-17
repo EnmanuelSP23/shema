@@ -1,40 +1,59 @@
+"use client";
+
+import Image from "next/image";
+import Link from "next/link";
+import { Product } from "@/types";
+import { useCart } from "@/hooks/useCart";
+
 interface ProductCardProps {
-  name: string;
-  category: string;
-  price: string;
-  image: string;
-  badge?: string | null;
+  product: Product;
 }
 
-export default function ProductCard({ name, category, price, image, badge }: ProductCardProps) {
+export default function ProductCard({ product }: ProductCardProps) {
+  const { addItem } = useCart();
+
   return (
-    <div className="group cursor-pointer">
-      <div className="relative aspect-[3/4] rounded-2xl overflow-hidden bg-lilac-50 mb-4">
-        <div className="absolute inset-0 bg-gradient-to-t from-lilac-100/50 to-transparent" />
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="w-full h-full flex items-center justify-center">
-            <div
-              className="w-3/4 h-3/4 rounded-2xl"
-              style={{ background: image }}
+    <div className="bg-pink-200 overflow-hidden border-b border-pink-300">
+      <Link href={`/products/${product.id}`}>
+        <div className="flex flex-col md:flex-row min-h-[280px] md:min-h-[380px]">
+          {/* Product Image - Left Side */}
+          <div className="w-full md:w-[35%] h-64 md:h-auto relative bg-pink-100">
+            <Image
+              src={product.image}
+              alt={product.name}
+              fill
+              className="object-cover"
             />
           </div>
+
+          {/* Product Details - Right Side */}
+          <div className="w-full md:w-[65%] p-5 md:p-10 flex flex-col justify-center bg-pink-200">
+            <p className="text-sm md:text-xl font-bold text-primary uppercase mb-1">
+              {product.brand}
+            </p>
+            <h3 className="text-base md:text-2xl font-bold text-primary mb-4 md:mb-6 leading-tight uppercase">
+              {product.name}
+            </h3>
+
+            <div className="flex gap-6 md:gap-10 mb-4 md:mb-6">
+              <div>
+                <span className="block text-xs md:text-sm font-bold text-primary uppercase mb-1">SIZE</span>
+                <span className="text-sm md:text-base font-bold text-primary uppercase">{product.size}</span>
+              </div>
+              <div>
+                <span className="block text-xs md:text-sm font-bold text-primary uppercase mb-1">COLOR</span>
+                <span className="text-sm md:text-base font-bold text-primary uppercase">{product.color}</span>
+              </div>
+            </div>
+
+            <div>
+              <p className="text-lg md:text-2xl font-bold text-primary uppercase">
+                PRICE: ${product.price.toFixed(2)}
+              </p>
+            </div>
+          </div>
         </div>
-        {badge && (
-          <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-white/90 text-lilac-700 text-xs font-semibold shadow-sm backdrop-blur-sm">
-            {badge}
-          </span>
-        )}
-        <button className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-sm hover:bg-lilac-500 hover:text-white">
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.5v15m7.5-7.5h-15" />
-          </svg>
-        </button>
-      </div>
-      <div>
-        <p className="text-xs text-lilac-500 font-medium uppercase tracking-wider mb-1">{category}</p>
-        <h3 className="text-sm font-semibold text-dark">{name}</h3>
-        <p className="text-sm text-gray-500 mt-1">{price}</p>
-      </div>
+      </Link>
     </div>
   );
 }

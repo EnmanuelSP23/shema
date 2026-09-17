@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { CartProvider } from "@/hooks/useCart";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -15,26 +16,22 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Shema — Curated Beauty & Essentials",
-  description:
-    "Discover curated makeup, clothing, and everyday essentials. Shema brings elegance and simplicity to your daily routine.",
+  title: "SHEMA - Makeup Collection",
+  description: "Multiply Your Beauty - Premium makeup, body care, and accessories",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-cream text-dark">
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
+      <body className="min-h-full flex flex-col">
+        <CartProvider>
+          <Header />
+          <main className="flex-grow">{children}</main>
+          <Footer />
+        </CartProvider>
       </body>
     </html>
   );

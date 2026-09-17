@@ -2,77 +2,76 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="bg-dark text-white mt-auto">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    <footer className="bg-pink-200 text-primary mt-auto border-t border-pink-300">
+      <div className="container mx-auto px-4 py-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div>
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-7 h-7 rounded-full bg-gradient-to-br from-lilac-300 to-lilac-500" />
-              <span className="text-lg font-bold tracking-tight">Shema</span>
-            </div>
-            <p className="text-sm text-gray-400 leading-relaxed">
-              Curated essentials for the modern soul. Beauty, fashion, and everyday elegance.
+            <h3 className="text-xl font-bold mb-4">SHEMA</h3>
+            <p className="text-secondary">Multiply Your Beauty</p>
+            <p className="mt-2 text-sm">
+              Premium makeup, body care, and accessories at the best prices.
             </p>
           </div>
 
           <div>
-            <h3 className="text-xs font-semibold uppercase tracking-widest text-lilac-300 mb-4">Shop</h3>
+            <h4 className="font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
-              {["Makeup", "Clothing", "Accessories", "Essentials"].map((item) => (
-                <li key={item}>
-                  <Link
-                    href="/products"
-                    className="text-sm text-gray-400 hover:text-lilac-300 transition-colors"
-                  >
-                    {item}
-                  </Link>
-                </li>
-              ))}
+              <li>
+                <Link href="/" className="hover:text-accent transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link href="/products" className="hover:text-accent transition-colors">
+                  Products
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="hover:text-accent transition-colors">
+                  Contact
+                </Link>
+              </li>
             </ul>
           </div>
 
           <div>
-            <h3 className="text-xs font-semibold uppercase tracking-widest text-lilac-300 mb-4">Company</h3>
-            <ul className="space-y-2">
-              {[
-                { label: "About", href: "/about" },
-                { label: "Contact", href: "/contact" },
-              ].map((item) => (
-                <li key={item.label}>
-                  <Link
-                    href={item.href}
-                    className="text-sm text-gray-400 hover:text-lilac-300 transition-colors"
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="text-xs font-semibold uppercase tracking-widest text-lilac-300 mb-4">Follow Us</h3>
-            <div className="flex gap-3">
-              {["Instagram", "TikTok", "Pinterest"].map((social) => (
-                <a
-                  key={social}
-                  href="#"
-                  className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center text-gray-400 hover:bg-lilac-500 hover:text-white transition-all"
-                  aria-label={social}
-                >
-                  <span className="text-xs font-medium">{social[0]}</span>
-                </a>
-              ))}
+            <h4 className="font-semibold mb-4">Contact Us</h4>
+            <p className="text-sm">Email: info@shema.com</p>
+            <p className="text-sm">WhatsApp: +1 (555) 123-4567</p>
+            <div className="flex space-x-4 mt-4">
+              <a
+                href="#"
+                className="hover:text-accent transition-colors"
+                aria-label="Instagram"
+              >
+                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                </svg>
+              </a>
+              <a
+                href="#"
+                className="hover:text-accent transition-colors"
+                aria-label="Facebook"
+              >
+                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
+                </svg>
+              </a>
+              <a
+                href="#"
+                className="hover:text-accent transition-colors"
+                aria-label="TikTok"
+              >
+                <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.5a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15.2a6.34 6.34 0 0 0 10.86 4.44v-7.13a8.16 8.16 0 0 0 5.58 2.18v-3.44a4.85 4.85 0 0 1-3.77-1.77z" />
+                </svg>
+              </a>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-white/10 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-gray-500">© 2026 Shema. All rights reserved.</p>
-          <div className="flex gap-4 text-xs text-gray-500">
-            <Link href="#" className="hover:text-lilac-300 transition-colors">Privacy</Link>
-            <Link href="#" className="hover:text-lilac-300 transition-colors">Terms</Link>
-          </div>
+        <div className="border-t border-secondary mt-8 pt-8 text-center text-sm">
+          <p>&copy; {new Date().getFullYear()} SHEMA Makeup Collection. All rights reserved.</p>
         </div>
       </div>
     </footer>

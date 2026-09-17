@@ -1,127 +1,161 @@
-import HeroSection from "@/components/HeroSection";
-import Newsletter from "@/components/Newsletter";
-import ProductCard from "@/components/ProductCard";
+import Image from "next/image";
 import Link from "next/link";
-
-const featuredProducts = [
-  {
-    name: "Velvet Matte Lipstick",
-    category: "Makeup",
-    price: "$24.00",
-    image: "linear-gradient(135deg, #c084fc, #7c2fba)",
-    badge: "Best Seller",
-  },
-  {
-    name: "Silk Chemise",
-    category: "Clothing",
-    price: "$68.00",
-    image: "linear-gradient(135deg, #f3e8ff, #e8b4b8)",
-    badge: "New",
-  },
-  {
-    name: "Radiance Serum",
-    category: "Skincare",
-    price: "$42.00",
-    image: "linear-gradient(135deg, #fdf2f8, #c084fc)",
-    badge: null,
-  },
-  {
-    name: "Lace Bralette Set",
-    category: "Clothing",
-    price: "$54.00",
-    image: "linear-gradient(135deg, #e9d5ff, #d8b4fe)",
-    badge: "Trending",
-  },
-];
-
-const categories = [
-  { name: "Makeup", gradient: "from-lilac-200 to-lilac-400", icon: "✦" },
-  { name: "Clothing", gradient: "from-blush to-rose-gold", icon: "◆" },
-  { name: "Accessories", gradient: "from-lilac-100 to-lilac-300", icon: "◈" },
-  { name: "Essentials", gradient: "from-lilac-50 to-lilac-200", icon: "◇" },
-];
+import ProductCard from "@/components/ProductCard";
+import products from "@/data/products.json";
 
 export default function Home() {
+  const featuredProducts = products.slice(0, 6);
+
   return (
-    <>
-      <HeroSection />
-
-      <section className="py-16 md:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <span className="inline-block px-3 py-1 rounded-full bg-lilac-100 text-lilac-600 text-xs font-semibold uppercase tracking-wider mb-4">
-              Categories
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-dark tracking-tight">
-              Shop by Category
-            </h2>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {categories.map((cat) => (
-              <Link
-                key={cat.name}
-                href="/products"
-                className={`rounded-2xl bg-gradient-to-br ${cat.gradient} p-6 md:p-8 text-center transition-transform hover:-translate-y-1`}
-              >
-                <div className="text-3xl mb-2">{cat.icon}</div>
-                <h3 className="text-sm font-semibold text-dark">{cat.name}</h3>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-16 md:py-20 bg-lilac-50/50 bg-dots">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-end justify-between mb-10">
-            <div>
-              <span className="inline-block px-3 py-1 rounded-full bg-lilac-100 text-lilac-600 text-xs font-semibold uppercase tracking-wider mb-4">
-                Featured
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-bold text-dark tracking-tight">
-                Bestsellers
-              </h2>
+    <div>
+      {/* Hero Section - Catalog Cover Style */}
+      <section className="relative bg-gradient-to-b from-pink-200 to-pink-100 py-12">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-center justify-between">
+            <div className="md:w-1/2 mb-10 md:mb-0 text-center md:text-left">
+              <h1 className="text-5xl md:text-7xl font-black text-primary mb-4 tracking-tight">
+                SHEMA
+              </h1>
+              <p className="text-2xl md:text-3xl text-primary font-bold mb-6 uppercase">
+                Makeup Collection
+              </p>
+              <p className="text-lg text-primary mb-8 max-w-md">
+                www.shema.com
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                <Link
+                  href="/products"
+                  className="bg-primary text-white px-8 py-3 rounded-full font-bold hover:bg-dark-rose transition-colors text-center"
+                >
+                  Shop Now
+                </Link>
+                <Link
+                  href="/contact"
+                  className="border-2 border-primary text-primary px-8 py-3 rounded-full font-bold hover:bg-primary hover:text-white transition-colors text-center"
+                >
+                  Contact Us
+                </Link>
+              </div>
             </div>
-            <Link
-              href="/products"
-              className="hidden sm:inline-flex text-sm font-medium text-lilac-600 hover:text-lilac-700 transition-colors"
-            >
-              View All →
-            </Link>
+            <div className="md:w-1/2 relative h-80 md:h-96">
+              <Image
+                src="/products/sehma.jpg"
+                alt="SHEMA Makeup Collection"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {featuredProducts.map(({ name, category, price, image, badge }) => (
-              <ProductCard key={name} name={name} category={category} price={price} image={image} badge={badge ?? undefined} />
-            ))}
-          </div>
-          <div className="mt-8 text-center sm:hidden">
-            <Link
-              href="/products"
-              className="inline-flex px-6 py-3 rounded-full border border-lilac-300 text-lilac-700 text-sm font-semibold"
-            >
-              View All Products →
-            </Link>
-          </div>
+        </div>
+
+        {/* Decorative Elements - Stars */}
+        <div className="absolute top-10 left-10 text-primary opacity-30">
+          <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+          </svg>
+        </div>
+        <div className="absolute top-20 right-20 text-primary opacity-30">
+          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+          </svg>
+        </div>
+        <div className="absolute bottom-20 left-20 text-primary opacity-30">
+          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+          </svg>
+        </div>
+        
+        {/* Discounts Banner */}
+        <div className="absolute bottom-4 right-4 md:bottom-8 md:right-8 text-right">
+          <p className="text-primary font-bold text-sm md:text-lg">DISCOUNTS,</p>
+          <p className="text-primary font-bold text-sm md:text-lg">GOOD PRICES</p>
+          <p className="text-primary font-bold text-sm md:text-lg">AND MORE</p>
+          <p className="text-primary font-bold text-xs md:text-sm mt-1 md:mt-2">AGOSTO</p>
+          <p className="text-primary font-black text-lg md:text-2xl">2026</p>
         </div>
       </section>
 
-      <section className="py-16 md:py-20 bg-cream">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative rounded-3xl bg-gradient-to-r from-lilac-600 to-lilac-800 overflow-hidden">
-            <div className="absolute inset-0 bg-dots-white" />
-            <div className="relative p-8 md:p-12 text-center text-white">
-              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
-                Free Shipping on Orders Over $75
-              </h2>
-              <p className="mt-2 text-sm sm:text-base text-lilac-200">
-                Plus, easy 30-day returns on all items.
+      {/* Features Section */}
+      <section className="py-8 bg-pink-100">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="text-center p-4">
+              <h3 className="text-xl font-bold text-primary mb-2 uppercase">
+                Authentic Products
+              </h3>
+              <p className="text-primary">
+                100% genuine products from top brands like Sephora, Victoria&apos;s Secret, and
+                Juicy Couture.
+              </p>
+            </div>
+
+            <div className="text-center p-4">
+              <h3 className="text-xl font-bold text-primary mb-2 uppercase">
+                Best Prices
+              </h3>
+              <p className="text-primary">
+                Discounted prices on premium products. Save big on your favorite brands.
+              </p>
+            </div>
+
+            <div className="text-center p-4">
+              <h3 className="text-xl font-bold text-primary mb-2 uppercase">
+                Fast Delivery
+              </h3>
+              <p className="text-primary">
+                Quick and reliable shipping right to your doorstep. Track your order anytime.
               </p>
             </div>
           </div>
         </div>
       </section>
 
-      <Newsletter />
-    </>
+      {/* Featured Products */}
+      <section className="py-8 bg-pink-50">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-6">
+            <h2 className="text-3xl font-bold text-primary mb-4 uppercase">
+              Featured Products
+            </h2>
+            <p className="text-primary max-w-2xl mx-auto">
+              Explore our handpicked selection of premium makeup and beauty products.
+            </p>
+          </div>
+
+          <div className="space-y-0">
+            {featuredProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+
+          <div className="text-center mt-8">
+            <Link
+              href="/products"
+              className="inline-block bg-primary text-white px-8 py-3 rounded-full font-bold hover:bg-dark-rose transition-colors"
+            >
+              View All Products
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-8 bg-primary text-white">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold mb-4 uppercase">Multiply Your Beauty</h2>
+          <p className="text-lg mb-6 max-w-2xl mx-auto">
+            Join thousands of satisfied customers who trust SHEMA for their beauty needs.
+            Shop now and discover the difference!
+          </p>
+          <Link
+            href="/products"
+            className="inline-block bg-white text-primary px-8 py-3 rounded-full font-bold hover:bg-pink-100 transition-colors"
+          >
+            Start Shopping
+          </Link>
+        </div>
+      </section>
+    </div>
   );
 }
