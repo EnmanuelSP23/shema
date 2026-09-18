@@ -184,8 +184,8 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-primary">Email</h3>
-                    <p className="text-primary">info@shema.com</p>
-                    <p className="text-primary">support@shema.com</p>
+                    <p className="text-primary">Coming Soon</p>
+                    <p className="text-primary">Coming Soon</p>
                   </div>
                 </div>
 
@@ -207,7 +207,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-primary">WhatsApp</h3>
-                    <p className="text-primary">+1 (555) 123-4567</p>
+                    <p className="text-primary"> + Coming Soon </p>
                     <p className="text-primary">Available 9am - 6pm EST</p>
                   </div>
                 </div>
