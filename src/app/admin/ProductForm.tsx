@@ -155,19 +155,19 @@ export default function ProductForm({ product, onSave, onCancel }: ProductFormPr
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-primary uppercase">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-primary uppercase">
           {product ? "Edit Product" : "Add Product"}
         </h1>
         <button
           onClick={onCancel}
-          className="text-primary hover:text-dark-rose font-bold"
+          className="text-primary hover:text-dark-rose font-bold self-start"
         >
           Cancel
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-pink-50 p-6 rounded-lg max-w-2xl">
+      <form onSubmit={handleSubmit} className="bg-pink-50 p-4 sm:p-6 rounded-lg max-w-2xl">
         {error && (
           <div className="bg-red-100 text-red-700 p-3 rounded mb-4 text-sm">{error}</div>
         )}
@@ -175,9 +175,9 @@ export default function ProductForm({ product, onSave, onCancel }: ProductFormPr
         {/* Image Upload */}
         <div className="mb-6">
           <label className="block text-sm font-bold text-primary mb-2">Product Image</label>
-          <div className="flex items-start gap-4">
+          <div className="flex flex-col sm:flex-row items-start gap-4">
             {imagePreview && (
-              <div className="relative w-32 h-32 bg-pink-200 rounded overflow-hidden">
+              <div className="relative w-full sm:w-32 h-48 sm:h-32 bg-pink-200 rounded overflow-hidden">
                 <Image
                   src={imagePreview}
                   alt="Preview"
@@ -197,7 +197,7 @@ export default function ProductForm({ product, onSave, onCancel }: ProductFormPr
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="bg-pink-200 text-primary px-4 py-2 rounded font-bold hover:bg-pink-300 transition-colors text-sm"
+                className="bg-pink-200 text-primary px-4 py-2 rounded font-bold hover:bg-pink-300 transition-colors text-sm w-full sm:w-auto"
               >
                 {imagePreview ? "Change Image" : "Upload Image"}
               </button>
@@ -206,7 +206,7 @@ export default function ProductForm({ product, onSave, onCancel }: ProductFormPr
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           {/* Brand */}
           <div>
             <label className="block text-sm font-bold text-primary mb-1">Brand</label>
@@ -310,18 +310,18 @@ export default function ProductForm({ product, onSave, onCancel }: ProductFormPr
           />
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row gap-4">
           <button
             type="submit"
             disabled={saving}
-            className="bg-primary text-white px-8 py-2 rounded-lg font-bold hover:bg-dark-rose transition-colors disabled:opacity-50"
+            className="bg-primary text-white px-8 py-2 rounded-lg font-bold hover:bg-dark-rose transition-colors disabled:opacity-50 w-full sm:w-auto"
           >
             {saving ? "Saving..." : product ? "Update Product" : "Add Product"}
           </button>
           <button
             type="button"
             onClick={onCancel}
-            className="bg-pink-200 text-primary px-8 py-2 rounded-lg font-bold hover:bg-pink-300 transition-colors"
+            className="bg-pink-200 text-primary px-8 py-2 rounded-lg font-bold hover:bg-pink-300 transition-colors w-full sm:w-auto"
           >
             Cancel
           </button>
