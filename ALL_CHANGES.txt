@@ -94,6 +94,8 @@ COMMIT HISTORY (continued)
 --------------------------
 6. 9051eac — Fix image uploads: add Supabase Storage RLS policies
 7. 420f13b — Allow Supabase storage images in Next.js Image component
+8. 855e792 — Fix image sizing: use object-contain for proper aspect ratio
+9. 42dd39f — Allow custom brand and category input in admin form
 
 [5] FIX IMAGE UPLOADS (9051eac, 420f13b)
 Fixed two issues preventing uploaded product images from displaying:
@@ -120,3 +122,21 @@ SUPABASE STORAGE SETUP REQUIRED (for new projects):
      FOR INSERT WITH CHECK (bucket_id = 'product-images');
    CREATE POLICY "Allow public reads" ON storage.objects
      FOR SELECT USING (bucket_id = 'product-images');
+
+[6] FIX IMAGE SIZING (855e792)
+Changed product images from object-cover (crops to fill) to object-contain
+(fits within container without cropping) for better display of uploaded images.
+
+FILES MODIFIED:
+- src/components/ProductCard.tsx — object-cover → object-contain with padding
+- src/app/products/[id]/page.tsx — same change on detail page
+
+[7] CUSTOM BRAND & CATEGORY INPUT (42dd39f)
+Replaced the fixed <select> dropdowns for Brand and Category in the admin
+product form with <input> + <datalist>. This lets the user pick from
+existing suggestions or type any custom value — useful when sourcing
+products from different brands/categories not in the original list.
+
+FILES MODIFIED:
+- src/app/admin/ProductForm.tsx — Brand and Category fields changed from
+  <select> to <input list="..."> with <datalist> suggestions
