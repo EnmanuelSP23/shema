@@ -84,3 +84,5 @@ src/
 - `CLAUDE.md` just contains `@AGENTS.md` (acts as a pointer).
 - Supabase env vars must be set in `.env.local` and in Netlify dashboard.
 - If Supabase is not configured, pages show empty states (graceful degradation).
+- Supabase Storage bucket `product-images` must be **Public** and have RLS policies for INSERT and SELECT (see ALL_CHANGES.txt for SQL).
+- `next.config.ts` whitelists `*.supabase.co` for the Next.js `Image` component — do not remove the `images.remotePatterns` config.

@@ -89,3 +89,34 @@ ADMIN PAGE FEATURES:
 - Delete product with confirmation
 - Image upload to Supabase Storage
 - Fields: brand, name, size, color, price, category, description
+
+COMMIT HISTORY (continued)
+--------------------------
+6. 9051eac — Fix image uploads: add Supabase Storage RLS policies
+7. 420f13b — Allow Supabase storage images in Next.js Image component
+
+[5] FIX IMAGE UPLOADS (9051eac, 420f13b)
+Fixed two issues preventing uploaded product images from displaying:
+
+ISSUE 1 — Storage RLS Policy Error:
+  Symptom: "Failed to upload image" + "new row violates row-level security policy"
+  Fix: Added Supabase Storage policies for the `product-images` bucket:
+    - INSERT policy: allows public uploads (bucket_id = 'product-images')
+    - SELECT policy: allows public reads (bucket_id = 'product-images')
+  Note: Bucket must also be set to Public in Supabase Dashboard → Storage
+
+ISSUE 2 — Next.js Image Component Blocking External Images:
+  Symptom: Image upload succeeds but image doesn't render on the page
+  Fix: Added `images.remotePatterns` to next.config.ts to whitelist *.supabase.co
+  This is required because Next.js blocks external image domains by default.
+
+FILES MODIFIED:
+- next.config.ts — Added images.remotePatterns for *.supabase.co
+
+SUPABASE STORAGE SETUP REQUIRED (for new projects):
+1. Create a Storage bucket named "product-images" (set to Public)
+2. Add these SQL policies via Supabase SQL Editor:
+   CREATE POLICY "Allow public uploads" ON storage.objects
+     FOR INSERT WITH CHECK (bucket_id = 'product-images');
+   CREATE POLICY "Allow public reads" ON storage.objects
+     FOR SELECT USING (bucket_id = 'product-images');
