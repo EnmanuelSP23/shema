@@ -1,0 +1,91 @@
+ALL CHANGES — SHEMA Makeup Collection Website
+=============================================
+Date: 2026-09-18
+
+PROJECT OVERVIEW
+----------------
+Custom e-commerce website for SHEMA — a makeup reselling business.
+Brands: Sephora Collection, Victoria's Secret, Juicy Couture, Givenchy, Dolce & Gabbana.
+Tech: Next.js 16, TypeScript, Tailwind CSS v4, Supabase, Netlify.
+
+COMMIT HISTORY
+--------------
+
+1. 15f05b2 — Initial commit from Create Next App
+2. 2125f27 — Initial project setup with Next.js
+3. 7ea5ec0 — Add warm cream background and subtle floral/dot textures
+4. 4aa6507 — Add complete shopping features: cart, checkout, product catalog
+   with filters, 56 product images, and responsive redesign
+5. 3a232fe — Migrate to Supabase database, add admin panel with password
+   gate, and server-side rendering (LATEST)
+
+FULL CHANGE LOG
+---------------
+
+[1] INITIAL SETUP (15f05b2, 2125f27)
+- Created Next.js 16 project with App Router
+- Configured TypeScript and Tailwind CSS v4
+- Basic project scaffolding
+
+[2] VISUAL DESIGN (7ea5ec0)
+- Added warm cream background color
+- Subtle floral/dot textures for brand aesthetic
+
+[3] SHOPPING FEATURES (4aa6507)
+- Product catalog with 30 products and 56 images
+- Category filtering (Lip Gloss, Lip Stain, Lip Care, etc.)
+- Shopping cart with localStorage persistence
+- Checkout page
+- Contact page
+- Responsive design for mobile/tablet/desktop
+- Product detail pages with related products
+
+[4] SUPABASE MIGRATION + ADMIN PANEL (3a232fe) — LATEST
+This is the biggest change. Products moved from a static JSON file
+to a Supabase PostgreSQL database. An admin dashboard was added.
+
+FILES CREATED:
+- src/lib/supabase.ts — Supabase client singleton
+- src/lib/products.ts — Server functions (getProducts, getProductById, etc.)
+- src/app/admin/layout.tsx — Password gate using env var
+- src/app/admin/page.tsx — Admin dashboard with product list table
+- src/app/admin/ProductForm.tsx — Create/edit form with image upload
+- seed.sql — SQL script to seed 30 products into Supabase
+- CHANGES.txt — Detailed changelog for this commit
+
+FILES MODIFIED:
+- package.json — Added @supabase/supabase-js dependency
+- src/app/page.tsx — Changed to async Server Component (fetches from Supabase)
+- src/app/products/page.tsx — Client-side Supabase fetch instead of static import
+- src/app/products/[id]/page.tsx — Client-side Supabase fetch for product detail
+- AGENTS.md — Updated documentation for admin page and Supabase setup
+
+FILES DELETED:
+- src/data/products.json — Data now lives in Supabase database
+
+ARCHITECTURE CHANGE:
+  BEFORE: products.json → direct ES import → 3 consumer components
+  AFTER:  Supabase DB → server/client fetch → same 3 consumer components
+          Supabase Storage ← image uploads from admin form
+          /admin route → Supabase CRUD operations
+
+ENVIRONMENT VARIABLES REQUIRED (set in Netlify dashboard):
+- NEXT_PUBLIC_SUPABASE_URL — Your Supabase project URL
+- NEXT_PUBLIC_SUPABASE_ANON_KEY — Your Supabase anonymous key
+- NEXT_PUBLIC_ADMIN_PASSWORD — Password for /admin access
+
+NETLIFY DEPLOYMENT STEPS:
+1. Go to Netlify Dashboard → your site → Site settings → Environment variables
+2. Add all three env vars listed above
+3. Push to git (git push) — Netlify auto-deploys
+4. After deploy, visit https://your-site.netlify.app/admin
+5. Enter the password you set in NEXT_PUBLIC_ADMIN_PASSWORD
+
+ADMIN PAGE FEATURES:
+- Password-protected access (stored in sessionStorage)
+- Product list table with image thumbnails
+- Add new product
+- Edit existing product (pre-filled form)
+- Delete product with confirmation
+- Image upload to Supabase Storage
+- Fields: brand, name, size, color, price, category, description
