@@ -90,12 +90,12 @@ export default function ProductDetailPage() {
         <div className="bg-pink-50 overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-2">
             {/* Product Image */}
-            <div className="relative h-96 md:h-[500px] bg-pink-200">
+            <div className="relative h-96 md:h-[500px] bg-pink-200 flex items-center justify-center">
               <Image
                 src={product.image}
                 alt={product.name}
                 fill
-                className="object-cover"
+                className="object-contain p-4"
                 priority
               />
             </div>

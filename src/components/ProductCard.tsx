@@ -17,12 +17,12 @@ export default function ProductCard({ product }: ProductCardProps) {
       <Link href={`/products/${product.id}`}>
         <div className="flex flex-col md:flex-row min-h-[280px] md:min-h-[380px]">
           {/* Product Image - Left Side */}
-          <div className="w-full md:w-[35%] h-64 md:h-auto relative bg-pink-100">
+          <div className="w-full md:w-[35%] h-64 md:h-auto relative bg-pink-100 flex items-center justify-center">
             <Image
               src={product.image}
               alt={product.name}
               fill
-              className="object-cover"
+              className="object-contain p-2"
             />
           </div>
 
