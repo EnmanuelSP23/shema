@@ -210,18 +210,21 @@ export default function ProductForm({ product, onSave, onCancel }: ProductFormPr
           {/* Brand */}
           <div>
             <label className="block text-sm font-bold text-primary mb-1">Brand</label>
-            <select
+            <input
+              type="text"
               name="brand"
               value={formData.brand}
               onChange={handleChange}
               required
+              list="brands-list"
               className="w-full px-4 py-2 border border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            >
-              <option value="">Select brand</option>
+              placeholder="Select or type a brand"
+            />
+            <datalist id="brands-list">
               {brands.map((b) => (
-                <option key={b} value={b}>{b}</option>
+                <option key={b} value={b} />
               ))}
-            </select>
+            </datalist>
           </div>
 
           {/* Name */}
@@ -283,17 +286,21 @@ export default function ProductForm({ product, onSave, onCancel }: ProductFormPr
           {/* Category */}
           <div>
             <label className="block text-sm font-bold text-primary mb-1">Category</label>
-            <select
+            <input
+              type="text"
               name="category"
               value={formData.category}
               onChange={handleChange}
               required
+              list="categories-list"
               className="w-full px-4 py-2 border border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            >
+              placeholder="Select or type a category"
+            />
+            <datalist id="categories-list">
               {categories.map((c) => (
-                <option key={c} value={c}>{c}</option>
+                <option key={c} value={c} />
               ))}
-            </select>
+            </datalist>
           </div>
         </div>
 
