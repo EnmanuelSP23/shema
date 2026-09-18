@@ -3,15 +3,53 @@
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import { useCart } from "@/hooks/useCart";
-import products from "@/data/products.json";
+import { Product } from "@/types";
+import { supabase } from "@/lib/supabase";
 import ProductCard from "@/components/ProductCard";
 
 export default function ProductDetailPage() {
   const params = useParams();
   const { addItem } = useCart();
+  const [product, setProduct] = useState<Product | null>(null);
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const product = products.find((p) => p.id === params.id);
+  useEffect(() => {
+    async function fetchProduct() {
+      if (!supabase) {
+        setLoading(false);
+        return;
+      }
+      const { data } = await supabase
+        .from("products")
+        .select("*")
+        .eq("id", params.id)
+        .single();
+
+      if (data) {
+        setProduct(data as Product);
+        const { data: related } = await supabase
+          .from("products")
+          .select("*")
+          .eq("category", data.category)
+          .neq("id", data.id)
+          .limit(4);
+        if (related) setRelatedProducts(related as Product[]);
+      }
+      setLoading(false);
+    }
+    if (params.id) fetchProduct();
+  }, [params.id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-primary">Loading...</p>
+      </div>
+    );
+  }
 
   if (!product) {
     return (
@@ -25,10 +63,6 @@ export default function ProductDetailPage() {
       </div>
     );
   }
-
-  const relatedProducts = products
-    .filter((p) => p.category === product.category && p.id !== product.id)
-    .slice(0, 4);
 
   return (
     <div className="bg-pink-100 min-h-screen">

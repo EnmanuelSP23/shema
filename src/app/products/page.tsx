@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import ProductCard from "@/components/ProductCard";
-import products from "@/data/products.json";
 import { Product, Category } from "@/types";
+import { supabase } from "@/lib/supabase";
 
 const categories: Category[] = [
   "Lip Gloss",
@@ -24,10 +24,25 @@ const categories: Category[] = [
 const brands = ["Sephora Collection", "Victoria's Secret", "Juicy Couture", "Givenchy", "Dolce & Gabbana"];
 
 export default function ProductsPage() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<Category | "">("");
   const [selectedBrand, setSelectedBrand] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<"price-asc" | "price-desc" | "name">("name");
+
+  useEffect(() => {
+    async function fetchProducts() {
+      if (!supabase) {
+        setLoading(false);
+        return;
+      }
+      const { data } = await supabase.from("products").select("*").order("name");
+      if (data) setProducts(data as Product[]);
+      setLoading(false);
+    }
+    fetchProducts();
+  }, []);
 
   const filteredProducts = useMemo(() => {
     let result = [...products] as Product[];
@@ -154,7 +169,7 @@ export default function ProductsPage() {
         {/* Results Count */}
         <div className="mb-6">
           <p className="text-primary font-bold">
-            Showing {filteredProducts.length} of {products.length} products
+            {loading ? "Loading products..." : `Showing ${filteredProducts.length} of ${products.length} products`}
           </p>
         </div>
 

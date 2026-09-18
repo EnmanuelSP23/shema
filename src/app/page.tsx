@@ -1,9 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
-import products from "@/data/products.json";
+import { getProducts } from "@/lib/products";
 
-export default function Home() {
+export default async function Home() {
+  const products = await getProducts();
   const featuredProducts = products.slice(0, 6);
 
   return (

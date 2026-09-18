@@ -1,0 +1,119 @@
+CHANGES LOG — Product Admin Panel with Supabase
+=================================================
+Date: 2026-09-16
+
+GOAL
+----
+Build a custom admin page at /admin where both owners can manage products
+(images, titles, descriptions, prices, etc.) without coding. Product data
+moves from static products.json to a Supabase PostgreSQL database. Images
+upload to Supabase Storage.
+
+DEPLOYMENT NOTE
+---------------
+The site is deployed on Netlify (not Vercel as previously documented).
+Netlify has a read-only filesystem in production, so a database is required
+for dynamic product data.
+
+ARCHITECTURE CHANGE
+-------------------
+BEFORE: products.json → direct ES module import → 3 consumer components
+AFTER:  Supabase DB → fetching → same 3 consumer components
+        Supabase Storage ← image uploads from admin form
+        /admin route → Supabase CRUD operations
+
+FILES CREATED
+-------------
+1. src/lib/supabase.ts
+   - Supabase client singleton
+   - Reads NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+2. src/lib/products.ts
+   - Server functions: getProducts(), getProductById(), getProductsByCategory()
+   - Used by homepage and product detail page
+
+3. src/app/admin/layout.tsx
+   - Password gate using ADMIN_PASSWORD env var
+   - Stores auth state in sessionStorage
+   - Clean modal prompt for password entry
+
+4. src/app/admin/page.tsx
+   - Admin dashboard with product list table
+   - Edit/Delete buttons per row
+   - "Add Product" button
+   - Image preview thumbnails
+
+5. src/app/admin/ProductForm.tsx
+   - Reusable form for create/edit
+   - Fields: brand, name, size, color, price, category, description
+   - Image upload to Supabase Storage
+   - Image preview
+
+FILES MODIFIED
+--------------
+7. package.json
+   - Added @supabase/supabase-js dependency
+
+8. src/app/page.tsx (Homepage)
+   - Changed from static JSON import to async server fetch via getProducts()
+   - Now an async Server Component
+
+9. src/app/products/page.tsx (Catalog)
+   - Changed from static JSON import to client-side Supabase fetch
+   - Stays "use client" for filter state management
+
+10. src/app/products/[id]/page.tsx (Product Detail)
+    - Changed from static JSON import to client-side Supabase fetch
+    - Fetches single product + related products
+
+11. AGENTS.md
+    - Updated to document admin page, Supabase setup, and env vars
+
+FILES DELETED
+-------------
+12. src/data/products.json
+    - Data now lives in Supabase database
+    - SQL seed script provided separately
+
+ENV VARS REQUIRED
+-----------------
+NEXT_PUBLIC_SUPABASE_URL=<supabase-project-url>
+NEXT_PUBLIC_SUPABASE_ANON_KEY=<supabase-anon-key>
+NEXT_PUBLIC_ADMIN_PASSWORD=<chosen-password-for-admin-access>
+
+SUPABASE SETUP (Manual)
+-----------------------
+1. Create free project at https://supabase.com
+2. Create "products" table with columns:
+   - id (text, PK)
+   - brand (text)
+   - name (text)
+   - size (text)
+   - color (text)
+   - price (numeric)
+   - category (text)
+   - image (text)
+   - description (text)
+   - created_at (timestamptz, default now())
+3. Create "product-images" storage bucket (public)
+4. Seed with existing 30 products using provided SQL script
+5. Add env vars to Netlify dashboard
+
+ADMIN PAGE FLOW
+---------------
+1. Navigate to /admin
+2. Password prompt modal appears
+3. Enter password → stored in sessionStorage
+4. See product list table with all products
+5. Click "Add Product" → empty form
+6. Click "Edit" → pre-filled form
+7. Upload image → stored in Supabase Storage → URL saved in product row
+8. Save → Supabase updated → list refreshes
+9. Click "Delete" → confirmation dialog → removed
+
+NETLIFY DEPLOYMENT
+------------------
+1. Set env vars in Netlify dashboard (Site settings → Environment variables)
+2. Push to git → Netlify auto-deploys
+3. Ensure _redirects or netlify.toml handles /admin route correctly
+   (should work out of the box with Next.js on Netlify)
