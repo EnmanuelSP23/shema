@@ -3,14 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/types";
-import { useCart } from "@/hooks/useCart";
 
 interface ProductCardProps {
   product: Product;
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-  const { addItem } = useCart();
 
   return (
     <div className="bg-pink-200 overflow-hidden border-b border-pink-300">

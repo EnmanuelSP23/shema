@@ -1,34 +1,16 @@
 "use client";
 
+import { socialLinks } from "@/lib/config";
 import { useState } from "react";
 
 export default function ContactPage() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    subject: "",
-    message: "",
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [selectedPlatform, setSelectedPlatform] = useState<"instagram" | "facebook">("instagram");
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    setFormData({ name: "", email: "", subject: "", message: "" });
+  const handleSendMessage = () => {
+    const url = selectedPlatform === "instagram"
+      ? `https://www.instagram.com/direct/new/?to=${socialLinks.instagram.split("/").filter(Boolean).pop()}`
+      : socialLinks.facebook;
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
   return (
@@ -38,124 +20,118 @@ export default function ContactPage() {
         <div className="text-center mb-12">
           <h1 className="text-3xl font-bold text-primary mb-4 uppercase">Contact Us</h1>
           <p className="text-primary max-w-2xl mx-auto">
-            Have questions about our products? We&apos;d love to hear from you. Send us a
-            message and we&apos;ll respond as soon as possible.
+            Have questions about our products? Reach out to us on social media and we&apos;ll
+            get back to you as soon as possible.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Contact Form */}
+          {/* How to Order */}
           <div className="bg-pink-50 rounded-lg shadow-md p-8">
-            {isSubmitted ? (
-              <div className="text-center py-12">
-                <div className="w-16 h-16 bg-green-200 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg
-                    className="w-8 h-8 text-green-600"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
+            <h2 className="text-xl font-bold text-primary mb-6 uppercase">
+              How to Order
+            </h2>
+
+            <div className="space-y-6">
+              {/* Step 1 */}
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold">
+                  1
                 </div>
-                <h2 className="text-2xl font-bold text-primary mb-2">
-                  Message Sent!
-                </h2>
-                <p className="text-primary mb-6">
-                  Thank you for contacting us. We&apos;ll get back to you within 24 hours.
-                </p>
+                <div>
+                  <h3 className="font-bold text-primary">Browse Our Products</h3>
+                  <p className="text-primary text-sm">
+                    Explore our catalog and find the products you love.
+                  </p>
+                </div>
+              </div>
+
+              {/* Step 2 */}
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold">
+                  2
+                </div>
+                <div>
+                  <h3 className="font-bold text-primary">Pick What You Love</h3>
+                  <p className="text-primary text-sm">
+                    Choose the items, shades, and quantities you want.
+                  </p>
+                </div>
+              </div>
+
+              {/* Step 3 */}
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold">
+                  3
+                </div>
+                <div>
+                  <h3 className="font-bold text-primary">Message Us</h3>
+                  <p className="text-primary text-sm">
+                    Send us a message on Instagram or Facebook with your order.
+                    We&apos;ll confirm availability and total cost.
+                  </p>
+                </div>
+              </div>
+
+              {/* Step 4 */}
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold">
+                  4
+                </div>
+                <div>
+                  <h3 className="font-bold text-primary">We Confirm &amp; Deliver</h3>
+                  <p className="text-primary text-sm">
+                    Once payment is settled, we ship your order right to your door!
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Message Us CTA */}
+            <div className="mt-8 pt-6 border-t border-pink-200">
+              <h3 className="font-bold text-primary mb-4 uppercase text-center">
+                Ready to Order?
+              </h3>
+
+              <div className="flex gap-3 justify-center mb-4">
                 <button
-                  onClick={() => setIsSubmitted(false)}
-                  className="text-primary hover:text-dark-rose underline font-bold"
+                  onClick={() => setSelectedPlatform("instagram")}
+                  className={`px-4 py-2 rounded-full font-bold text-sm transition-colors ${
+                    selectedPlatform === "instagram"
+                      ? "bg-primary text-white"
+                      : "bg-pink-200 text-primary hover:bg-pink-300"
+                  }`}
                 >
-                  Send another message
+                  Instagram
+                </button>
+                <button
+                  onClick={() => setSelectedPlatform("facebook")}
+                  className={`px-4 py-2 rounded-full font-bold text-sm transition-colors ${
+                    selectedPlatform === "facebook"
+                      ? "bg-primary text-white"
+                      : "bg-pink-200 text-primary hover:bg-pink-300"
+                  }`}
+                >
+                  Facebook
                 </button>
               </div>
-            ) : (
-              <form onSubmit={handleSubmit}>
-                <h2 className="text-xl font-bold text-primary mb-6 uppercase">
-                  Send us a Message
-                </h2>
 
-                <div className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-sm font-bold text-primary mb-1">
-                        Your Name
-                      </label>
-                      <input
-                        type="text"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full px-4 py-2 border border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-bold text-primary mb-1">
-                        Email Address
-                      </label>
-                      <input
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full px-4 py-2 border border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-bold text-primary mb-1">
-                      Subject
-                    </label>
-                    <select
-                      name="subject"
-                      value={formData.subject}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full px-4 py-2 border border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                    >
-                      <option value="">Select a subject</option>
-                      <option value="product-inquiry">Product Inquiry</option>
-                      <option value="order-status">Order Status</option>
-                      <option value="returns">Returns & Exchanges</option>
-                      <option value="wholesale">Wholesale Inquiry</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-bold text-primary mb-1">
-                      Message
-                    </label>
-                    <textarea
-                      name="message"
-                      value={formData.message}
-                      onChange={handleInputChange}
-                      required
-                      rows={5}
-                      className="w-full px-4 py-2 border border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none"
-                    />
-                  </div>
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="mt-6 w-full bg-primary text-white py-3 rounded-full font-bold hover:bg-dark-rose transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {isSubmitting ? "Sending..." : "Send Message"}
-                </button>
-              </form>
-            )}
+              <button
+                onClick={handleSendMessage}
+                className="w-full bg-primary text-white py-3 rounded-full font-bold hover:bg-dark-rose transition-colors flex items-center justify-center gap-2"
+              >
+                {selectedPlatform === "instagram" ? (
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                  </svg>
+                ) : (
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
+                  </svg>
+                )}
+                Message us on {selectedPlatform === "instagram" ? "Instagram" : "Facebook"}
+              </button>
+            </div>
           </div>
 
           {/* Contact Info */}
@@ -185,7 +161,6 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-bold text-primary">Email</h3>
                     <p className="text-primary">Coming Soon</p>
-                    <p className="text-primary">Coming Soon</p>
                   </div>
                 </div>
 
@@ -207,8 +182,7 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <h3 className="font-bold text-primary">WhatsApp</h3>
-                    <p className="text-primary"> + Coming Soon </p>
-                    <p className="text-primary">Available 9am - 6pm EST</p>
+                    <p className="text-primary">Coming Soon</p>
                   </div>
                 </div>
 
@@ -252,7 +226,9 @@ export default function ContactPage() {
               </p>
               <div className="flex space-x-4">
                 <a
-                  href="#"
+                  href={socialLinks.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-12 h-12 bg-pink-200 rounded-full flex items-center justify-center hover:bg-primary hover:text-white transition-colors"
                   aria-label="Instagram"
                 >
@@ -261,7 +237,9 @@ export default function ContactPage() {
                   </svg>
                 </a>
                 <a
-                  href="#"
+                  href={socialLinks.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="w-12 h-12 bg-pink-200 rounded-full flex items-center justify-center hover:bg-primary hover:text-white transition-colors"
                   aria-label="Facebook"
                 >
@@ -270,7 +248,7 @@ export default function ContactPage() {
                   </svg>
                 </a>
                 <a
-                  href="#"
+                  href={socialLinks.tiktok}
                   className="w-12 h-12 bg-pink-200 rounded-full flex items-center justify-center hover:bg-primary hover:text-white transition-colors"
                   aria-label="TikTok"
                 >

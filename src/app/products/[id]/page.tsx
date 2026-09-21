@@ -4,14 +4,13 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { useCart } from "@/hooks/useCart";
 import { Product } from "@/types";
 import { supabase } from "@/lib/supabase";
+import { socialLinks } from "@/lib/config";
 import ProductCard from "@/components/ProductCard";
 
 export default function ProductDetailPage() {
   const params = useParams();
-  const { addItem } = useCart();
   const [product, setProduct] = useState<Product | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -132,12 +131,14 @@ export default function ProductDetailPage() {
                 </span>
               </div>
 
-              <button
-                onClick={() => addItem(product)}
-                className="w-full bg-primary text-white py-3 rounded-full font-bold hover:bg-dark-rose transition-colors"
+              <a
+                href={socialLinks.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block w-full bg-primary text-white py-3 rounded-full font-bold hover:bg-dark-rose transition-colors text-center"
               >
-                Add to Cart
-              </button>
+                Get Product Now
+              </a>
 
               <div className="mt-4 flex items-center text-xs text-primary">
                 <svg

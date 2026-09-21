@@ -20,9 +20,7 @@ export default async function Home() {
               <p className="text-2xl md:text-3xl text-primary font-bold mb-6 uppercase">
                 Makeup Collection
               </p>
-              <p className="text-lg text-primary mb-8 max-w-md">
-                www.shema.com
-              </p>
+              
               <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
                 <Link
                   href="/products"
@@ -38,12 +36,12 @@ export default async function Home() {
                 </Link>
               </div>
             </div>
-            <div className="md:w-1/2 relative h-80 md:h-96">
+            <div className="md:w-1/2 relative h-48 md:h-[420px]">
               <Image
                 src="/products/sehma.jpg"
                 alt="SHEMA Makeup Collection"
                 fill
-                className="object-contain"
+                className="object-cover rounded-3xl shadow-2xl"
                 priority
               />
             </div>
@@ -69,48 +67,12 @@ export default async function Home() {
         
         {/* Discounts Banner */}
         <div className="absolute bottom-4 right-4 md:bottom-8 md:right-8 text-right">
-          <p className="text-primary font-bold text-sm md:text-lg">DISCOUNTS,</p>
-          <p className="text-primary font-bold text-sm md:text-lg">GOOD PRICES</p>
-          <p className="text-primary font-bold text-sm md:text-lg">AND MORE</p>
           <p className="text-primary font-bold text-xs md:text-sm mt-1 md:mt-2">AGOSTO</p>
           <p className="text-primary font-black text-lg md:text-2xl">2026</p>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-8 bg-pink-100">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="text-center p-4">
-              <h3 className="text-xl font-bold text-primary mb-2 uppercase">
-                Authentic Products
-              </h3>
-              <p className="text-primary">
-                100% genuine products from top brands like Sephora, Victoria&apos;s Secret, and
-                Juicy Couture.
-              </p>
-            </div>
-
-            <div className="text-center p-4">
-              <h3 className="text-xl font-bold text-primary mb-2 uppercase">
-                Best Prices
-              </h3>
-              <p className="text-primary">
-                Discounted prices on premium products. Save big on your favorite brands.
-              </p>
-            </div>
-
-            <div className="text-center p-4">
-              <h3 className="text-xl font-bold text-primary mb-2 uppercase">
-                Fast Delivery
-              </h3>
-              <p className="text-primary">
-                Quick and reliable shipping right to your doorstep. Track your order anytime.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+     
 
       {/* Featured Products */}
       <section className="py-8 bg-pink-50">

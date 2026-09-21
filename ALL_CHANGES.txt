@@ -140,3 +140,61 @@ products from different brands/categories not in the original list.
 FILES MODIFIED:
 - src/app/admin/ProductForm.tsx — Brand and Category fields changed from
   <select> to <input list="..."> with <datalist> suggestions
+
+[8] HOMEPAGE IMAGE FIX + PRODUCTS PAGE BUG FIX (2026-09-20)
+
+ISSUE 1 — Hero image on homepage looked bad:
+  Symptom: The SHEMA logo image on the right side of the hero section
+  had object-contain with no styling, appearing as a flat rectangle.
+  Fix: Changed to object-cover with rounded-3xl, shadow-2xl, and adjusted
+  height (h-48 on mobile, md:h-[420px] on desktop).
+
+ISSUE 2 — Products page showed "No products found" despite having products:
+  Symptom: /products page displayed "Showing 0 of 11 products" and
+  "No products found matching your criteria" even with no filters applied.
+  Root cause: useMemo dependency array was missing `products`. When the
+  page loaded, products was [], filteredProducts was calculated as [].
+  When Supabase responded and updated state, useMemo didn't recalculate
+  because `products` wasn't in the dependency array.
+  Fix: Added `products` to useMemo dependencies.
+
+FILES MODIFIED:
+- src/app/page.tsx — Hero image: object-contain → object-cover, added
+  rounded-3xl, shadow-2xl, adjusted height for mobile/desktop
+- src/app/products/page.tsx — Added `products` to useMemo dependency array
+
+[9] CONTACT PAGE + SOCIAL LINKS (2026-09-20)
+
+Replaced the contact form with a "How to Order" guide and centralized
+social media links into a shared config.
+
+WHAT CHANGED:
+- Contact form (Send Us A Message) removed — not needed for new business
+- Replaced with "How to Order" step-by-step guide (4 steps)
+- Added dynamic "Message Us" CTA with Instagram/Facebook toggle
+- Social media links now stored in a single config file
+- Footer and Contact page both import from config (single source of truth)
+- Updated Instagram and Facebook URLs to real accounts
+
+FILES CREATED:
+- src/lib/config.ts — Centralized social media URLs
+
+FILES MODIFIED:
+- src/components/Footer.tsx — Imports social links from config.ts
+- src/app/contact/page.tsx — Replaced form with How to Order + social CTA
+
+[10] REMOVE CART, ADD "GET PRODUCT NOW" (2026-09-20)
+
+No payment system yet, so replaced the Add to Cart flow with a direct
+"Get Product Now" button that opens Instagram DM for order processing.
+
+WHAT CHANGED:
+- "Add to Cart" button → "Get Product Now" link (opens Instagram DM)
+- Cart icon + badge removed from Header
+- Dead useCart import removed from ProductCard
+- Cart/checkout pages remain in codebase (easy to re-enable later)
+
+FILES MODIFIED:
+- src/app/products/[id]/page.tsx — Replaced addItem button with Instagram link
+- src/components/Header.tsx — Removed cart icon, badge, and useCart import
+- src/components/ProductCard.tsx — Removed dead useCart import

@@ -78,7 +78,7 @@ export default function ProductsPage() {
     }
 
     return result;
-  }, [selectedCategory, selectedBrand, searchQuery, sortBy]);
+  }, [products, selectedCategory, selectedBrand, searchQuery, sortBy]);
 
   return (
     <div className="bg-pink-100 min-h-screen">

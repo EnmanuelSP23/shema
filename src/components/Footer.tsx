@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { socialLinks } from "@/lib/config";
 
 export default function Footer() {
   return (
@@ -36,11 +37,12 @@ export default function Footer() {
 
           <div>
             <h4 className="font-semibold mb-4">Contact Us</h4>
-            <p className="text-sm">Email: info@shema.com</p>
-            <p className="text-sm">WhatsApp: +1 (555) 123-4567</p>
+            <p className="text-sm">WhatsApp: + Coming Soon</p>
             <div className="flex space-x-4 mt-4">
               <a
-                href="#"
+                href={socialLinks.instagram}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:text-accent transition-colors"
                 aria-label="Instagram"
               >
@@ -49,7 +51,9 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="#"
+                href={socialLinks.facebook}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="hover:text-accent transition-colors"
                 aria-label="Facebook"
               >
@@ -58,7 +62,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="#"
+                href={socialLinks.tiktok}
                 className="hover:text-accent transition-colors"
                 aria-label="TikTok"
               >
