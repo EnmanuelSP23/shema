@@ -198,3 +198,76 @@ FILES MODIFIED:
 - src/app/products/[id]/page.tsx — Replaced addItem button with Instagram link
 - src/components/Header.tsx — Removed cart icon, badge, and useCart import
 - src/components/ProductCard.tsx — Removed dead useCart import
+
+[11] REPLACE FAVICON (2026-09-20)
+
+Replaced the default Next.js favicon with a custom SVG monogram
+matching the SHEMA brand colors.
+
+WHAT CHANGED:
+- Removed src/app/favicon.ico (default Next.js icon)
+- Created src/app/icon.svg — "S" serif monogram, pink background (#FFD1DC),
+  primary text (#8B1A4A). Next.js App Router auto-detects icon.svg.
+
+FILES CREATED:
+- src/app/icon.svg — SVG favicon
+
+FILES DELETED:
+- src/app/favicon.ico — Replaced by icon.svg
+
+[12] MULTI-IMAGE PRODUCTS (2026-10-04)
+
+Products can now have up to 3 images instead of 1, with a carousel
+on the product detail page.
+
+WHAT CHANGED:
+- Added `images TEXT[]` column to Supabase `products` table and
+  backfilled existing rows (migrate_add_images.sql)
+- Admin form: multi-image upload UI (up to 3, first is the main image),
+  thumbnail previews with remove buttons
+- Product detail page: prev/next arrows, keyboard arrows, "1 / 3" counter
+- `getProductImages()` helper falls back to the single `image` column
+  when `images` is missing or empty (graceful for old rows)
+- Legacy `image` column still written (first image) for older code paths
+
+FILES CREATED:
+- migrate_add_images.sql — Supabase migration (safe to re-run)
+
+FILES MODIFIED:
+- src/types/index.ts — Added optional `images?: string[] | null`
+- src/lib/products.ts — Added getProductImages()
+- src/app/admin/ProductForm.tsx — Multi-image upload UI
+- src/app/products/[id]/page.tsx — Image carousel
+- src/components/ProductCard.tsx — Layout tweak (50/50 split)
+- seed.sql — Added images column to CREATE TABLE
+
+[13] FALL THEME + AUTO SEASON SWITCHING (2026-10-04)
+
+Seasonal theme: warm blush fall palette active Sep–Nov, automatic,
+reverting to the classic pink look the rest of the year. Brand anchors
+(primary #8B1A4A, dark-rose #6B0F3A, foreground #4A0E2E) unchanged in
+both seasons so the SHEMA identity is preserved.
+
+WHAT CHANGED:
+- An inline pre-paint script in <body> sets data-season="fall" on <html>
+  when the visitor's local month is 9, 10, or 11 (else "summer")
+- globals.css: Tailwind's pink-50/100/200/300 utilities remapped to
+  --surface-0..3 vars, so all ~80 bg-pink-*/border-pink-* usages switch
+  with the season — zero component edits needed
+- Fall overrides: warm cream backgrounds, terracotta secondary
+  (#C97B5E), burnt-sienna accent (#A85A3C) for hovers
+- Hero decor: stars (summer) swap to swaying leaf SVGs (fall) via CSS,
+  respects prefers-reduced-motion
+- Hardcoded "AGOSTO 2026" banner replaced with SeasonLabel component
+  (current Spanish month + year, filled on mount — no hydration mismatch)
+- Summer palette is pixel-identical to the previous look (exact Tailwind
+  oklch defaults preserved in :root)
+
+FILES CREATED:
+- src/components/SeasonLabel.tsx — Dynamic month/year hero label
+
+FILES MODIFIED:
+- src/app/globals.css — Season var system, surface remap, decor CSS
+- src/app/layout.tsx — Inline season script
+- src/app/page.tsx — Leaf decor + SeasonLabel banner
+- AGENTS.md — Documented seasonal theming

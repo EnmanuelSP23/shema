@@ -15,7 +15,7 @@ export default function ProductCard({ product }: ProductCardProps) {
       <Link href={`/products/${product.id}`}>
         <div className="flex flex-col md:flex-row min-h-[280px] md:min-h-[380px]">
           {/* Product Image - Left Side */}
-          <div className="w-full md:w-[35%] h-64 md:h-auto relative bg-pink-100 flex items-center justify-center">
+          <div className="w-full md:w-1/2 h-80 md:h-auto relative bg-pink-100 flex items-center justify-center">
             <Image
               src={product.image}
               alt={product.name}
@@ -25,7 +25,7 @@ export default function ProductCard({ product }: ProductCardProps) {
           </div>
 
           {/* Product Details - Right Side */}
-          <div className="w-full md:w-[65%] p-5 md:p-10 flex flex-col justify-center bg-pink-200">
+          <div className="w-full md:w-1/2 p-5 md:p-10 flex flex-col justify-center bg-pink-200">
             <p className="text-sm md:text-xl font-bold text-primary uppercase mb-1">
               {product.brand}
             </p>

@@ -16,6 +16,12 @@
 - **CSS variables defined in** `src/app/globals.css` — not a `tailwind.config.js` (does not exist)
 - **Current palette:** Pink tones — background `#FFD1DC`, foreground `#4A0E2E`, primary `#8B1A4A`, secondary `#D4758C`, accent `#C4687A`, dark-rose `#6B0F3A`
 - **Tailwind theme:** Uses `@theme inline` block in globals.css to map CSS vars to Tailwind tokens
+- **Seasonal theming (auto):** An inline script in `layout.tsx` sets `data-season="fall"` on `<html>` for Sep–Nov (visitor local time), else `"summer"`.
+  - `globals.css` holds a `:root[data-season="fall"]` override block (warm cream surfaces, terracotta `--secondary`, burnt-sienna `--accent`). Brand anchors (primary/dark-rose/foreground) stay unchanged.
+  - Tailwind `pink-50/100/200/300` utilities are remapped to `--surface-0..3` in `@theme inline` — so all `bg-pink-*`/`border-pink-*` usages switch with the season. To retint any surface, edit the surface vars, not the components.
+  - Hero decor: `.decor-stars` (summer) / `.decor-leaves` (fall) toggled by CSS in `globals.css`.
+  - `src/components/SeasonLabel.tsx` renders the current month/year in the hero (fills on mount — keep `useState` initial values as ` ` to avoid hydration mismatch).
+  - To add winter: add a `:root[data-season="winter"]` block + extend the month range in the `layout.tsx` script.
 
 ## Product Data
 - **Stored in:** Supabase `products` table (migrated from static JSON)

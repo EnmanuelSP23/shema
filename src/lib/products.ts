@@ -1,6 +1,13 @@
 import { supabase } from "./supabase";
 import { Product } from "@/types";
 
+export function getProductImages(product: Product): string[] {
+  if (product.images && product.images.length > 0) {
+    return product.images.filter(Boolean);
+  }
+  return product.image ? [product.image] : [];
+}
+
 export async function getProducts(): Promise<Product[]> {
   if (!supabase) return [];
 

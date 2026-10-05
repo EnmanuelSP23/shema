@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS products (
   price NUMERIC(10,2) NOT NULL,
   category TEXT NOT NULL,
   image TEXT NOT NULL,
+  images TEXT[],
   description TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -50,3 +51,6 @@ INSERT INTO products (id, brand, name, size, color, price, category, image, desc
 INSERT INTO products (id, brand, name, size, color, price, category, image, description) VALUES ('sephora-scented-lips', 'Sephora Collection', 'Scented Lip Balm Set', '0.5 OZ', 'Various Scents', 14.99, 'Lip Care', '/products/scentedlips.jpg', 'Set of scented lip balms for hydration and flavor.');
 INSERT INTO products (id, brand, name, size, color, price, category, image, description) VALUES ('sephora-blush', 'Sephora Collection', 'Colorful Blush', '0.12 OZ', 'Various Shades', 12.99, 'Blush', '/products/img.jpg', 'Silky smooth blush for a natural, healthy glow.');
 INSERT INTO products (id, brand, name, size, color, price, category, image, description) VALUES ('beauty-set-1', 'Sephora Collection', 'Beauty Essentials Set', 'Various', 'Multi-Color', 34.99, 'Gift Set', '/products/pack1.jpg', 'Curated set of beauty essentials for a complete look.');
+
+-- Use the single image as the first entry of the images array
+UPDATE products SET images = ARRAY[image] WHERE images IS NULL;

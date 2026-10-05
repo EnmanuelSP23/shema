@@ -4,6 +4,14 @@ import { useState, useRef } from "react";
 import Image from "next/image";
 import { Product } from "@/types";
 import { supabase } from "@/lib/supabase";
+import { getProductImages } from "@/lib/products";
+
+const MAX_IMAGES = 3;
+
+interface ImageEntry {
+  file: File | null;
+  url: string;
+}
 
 const categories = [
   "Lip Gloss",
@@ -47,8 +55,10 @@ export default function ProductForm({ product, onSave, onCancel }: ProductFormPr
     image: product?.image || "",
     description: product?.description || "",
   });
-  const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState(product?.image || "");
+  const [imageEntries, setImageEntries] = useState<ImageEntry[]>(() => {
+    const existing = product ? getProductImages(product) : [];
+    return existing.map((url) => ({ file: null, url }));
+  });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -68,16 +78,34 @@ export default function ProductForm({ product, onSave, onCancel }: ProductFormPr
     }));
   }
 
-  function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (file) {
-      setImageFile(file);
+  function readFileAsDataUrl(file: File): Promise<string> {
+    return new Promise((resolve) => {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
+      reader.onloadend = () => resolve(reader.result as string);
       reader.readAsDataURL(file);
+    });
+  }
+
+  async function handleImagesChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files || []);
+    e.target.value = "";
+    if (files.length === 0) return;
+
+    if (imageEntries.length + files.length > MAX_IMAGES) {
+      setError(`You can have up to ${MAX_IMAGES} images`);
+      return;
     }
+    setError("");
+
+    const urls = await Promise.all(files.map(readFileAsDataUrl));
+    setImageEntries((prev) => [
+      ...prev,
+      ...files.map((file, i) => ({ file, url: urls[i] })),
+    ]);
+  }
+
+  function removeImage(index: number) {
+    setImageEntries((prev) => prev.filter((_, i) => i !== index));
   }
 
   async function uploadImage(file: File): Promise<string | null> {
@@ -111,22 +139,27 @@ export default function ProductForm({ product, onSave, onCancel }: ProductFormPr
     setSaving(true);
     setError("");
 
-    let imageUrl = formData.image;
+    const imageUrls: string[] = [];
 
-    if (imageFile) {
-      const uploaded = await uploadImage(imageFile);
-      if (!uploaded) {
-        setError("Failed to upload image");
-        setSaving(false);
-        return;
+    for (const entry of imageEntries) {
+      if (entry.file) {
+        const uploaded = await uploadImage(entry.file);
+        if (!uploaded) {
+          setError("Failed to upload image");
+          setSaving(false);
+          return;
+        }
+        imageUrls.push(uploaded);
+      } else {
+        imageUrls.push(entry.url);
       }
-      imageUrl = uploaded;
     }
 
     const productData = {
       ...formData,
       id: product ? product.id : generateId(formData.brand, formData.name),
-      image: imageUrl,
+      image: imageUrls[0] || formData.image,
+      images: imageUrls,
     };
 
     if (product) {
@@ -174,36 +207,58 @@ export default function ProductForm({ product, onSave, onCancel }: ProductFormPr
 
         {/* Image Upload */}
         <div className="mb-6">
-          <label className="block text-sm font-bold text-primary mb-2">Product Image</label>
-          <div className="flex flex-col sm:flex-row items-start gap-4">
-            {imagePreview && (
-              <div className="relative w-full sm:w-32 h-48 sm:h-32 bg-pink-200 rounded overflow-hidden">
+          <label className="block text-sm font-bold text-primary mb-2">
+            Product Images (up to {MAX_IMAGES})
+          </label>
+          <div className="flex flex-wrap gap-3 mb-3">
+            {imageEntries.map((entry, index) => (
+              <div
+                key={index}
+                className="relative w-24 h-24 bg-pink-200 rounded overflow-hidden"
+              >
                 <Image
-                  src={imagePreview}
-                  alt="Preview"
+                  src={entry.url}
+                  alt={`Image ${index + 1}`}
                   fill
                   className="object-cover"
                 />
+                <button
+                  type="button"
+                  onClick={() => removeImage(index)}
+                  aria-label={`Remove image ${index + 1}`}
+                  className="absolute top-0 right-0 w-5 h-5 bg-primary text-white text-xs leading-5 text-center hover:bg-dark-rose"
+                >
+                  ×
+                </button>
+                {index === 0 && (
+                  <span className="absolute bottom-0 inset-x-0 bg-primary text-white text-[10px] text-center py-0.5">
+                    Main
+                  </span>
+                )}
               </div>
-            )}
-            <div>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/*"
-                onChange={handleImageChange}
-                className="hidden"
-              />
+            ))}
+            {imageEntries.length < MAX_IMAGES && (
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="bg-pink-200 text-primary px-4 py-2 rounded font-bold hover:bg-pink-300 transition-colors text-sm w-full sm:w-auto"
+                className="w-24 h-24 border-2 border-dashed border-pink-300 rounded flex flex-col items-center justify-center text-primary font-bold hover:bg-pink-100 transition-colors"
               >
-                {imagePreview ? "Change Image" : "Upload Image"}
+                <span className="text-2xl leading-none">+</span>
+                <span className="text-xs mt-1">Add</span>
               </button>
-              <p className="text-xs text-primary mt-1">JPG, PNG, or WebP</p>
-            </div>
+            )}
           </div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleImagesChange}
+            className="hidden"
+          />
+          <p className="text-xs text-primary">
+            JPG, PNG, or WebP — up to {MAX_IMAGES} images. The first image is the main one.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">

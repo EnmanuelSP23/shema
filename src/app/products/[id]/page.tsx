@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Product } from "@/types";
 import { supabase } from "@/lib/supabase";
+import { getProductImages } from "@/lib/products";
 import { socialLinks } from "@/lib/config";
 import ProductCard from "@/components/ProductCard";
 
@@ -14,6 +15,27 @@ export default function ProductDetailPage() {
   const [product, setProduct] = useState<Product | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [imageIndex, setImageIndex] = useState(0);
+
+  const images = product ? getProductImages(product) : [];
+  const currentImage = images[Math.min(imageIndex, images.length - 1)];
+
+  useEffect(() => {
+    setImageIndex(0);
+  }, [params.id]);
+
+  useEffect(() => {
+    if (images.length <= 1) return;
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "ArrowLeft") {
+        setImageIndex((i) => (i - 1 + images.length) % images.length);
+      } else if (e.key === "ArrowRight") {
+        setImageIndex((i) => (i + 1) % images.length);
+      }
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [images.length]);
 
   useEffect(() => {
     async function fetchProduct() {
@@ -90,13 +112,41 @@ export default function ProductDetailPage() {
           <div className="grid grid-cols-1 md:grid-cols-2">
             {/* Product Image */}
             <div className="relative h-96 md:h-[500px] bg-pink-200 flex items-center justify-center">
-              <Image
-                src={product.image}
-                alt={product.name}
-                fill
-                className="object-contain p-4"
-                priority
-              />
+              {currentImage ? (
+                <Image
+                  src={currentImage}
+                  alt={product.name}
+                  fill
+                  className="object-contain p-4"
+                  priority
+                />
+              ) : null}
+
+              {images.length > 1 && (
+                <>
+                  <button
+                    type="button"
+                    aria-label="Previous image"
+                    onClick={() =>
+                      setImageIndex((i) => (i - 1 + images.length) % images.length)
+                    }
+                    className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-primary text-2xl leading-none font-bold flex items-center justify-center shadow-md transition-colors"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    type="button"
+                    aria-label="Next image"
+                    onClick={() => setImageIndex((i) => (i + 1) % images.length)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 hover:bg-white text-primary text-2xl leading-none font-bold flex items-center justify-center shadow-md transition-colors"
+                  >
+                    ›
+                  </button>
+                  <span className="absolute bottom-3 right-3 bg-white/80 text-primary text-xs font-bold px-2 py-1 rounded-full">
+                    {Math.min(imageIndex, images.length - 1) + 1} / {images.length}
+                  </span>
+                </>
+              )}
             </div>
 
             {/* Product Info */}

@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
+import SeasonLabel from "@/components/SeasonLabel";
 import { getProducts } from "@/lib/products";
 
 export default async function Home() {
@@ -48,28 +49,58 @@ export default async function Home() {
           </div>
         </div>
 
-        {/* Decorative Elements - Stars */}
-        <div className="absolute top-10 left-10 text-primary opacity-30">
+        {/* Decorative Elements - Stars (summer) / Leaves (fall) */}
+        <div className="decor-stars absolute top-10 left-10 text-primary opacity-30">
           <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
           </svg>
         </div>
-        <div className="absolute top-20 right-20 text-primary opacity-30">
+        <div className="decor-stars absolute top-20 right-20 text-primary opacity-30">
           <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
           </svg>
         </div>
-        <div className="absolute bottom-20 left-20 text-primary opacity-30">
+        <div className="decor-stars absolute bottom-20 left-20 text-primary opacity-30">
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
           </svg>
         </div>
-        
-        {/* Discounts Banner */}
-        <div className="absolute bottom-4 right-4 md:bottom-8 md:right-8 text-right">
-          <p className="text-primary font-bold text-xs md:text-sm mt-1 md:mt-2">AGOSTO</p>
-          <p className="text-primary font-black text-lg md:text-2xl">2026</p>
+        <div className="decor-leaves absolute top-12 right-24 text-accent opacity-40">
+          <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M4 20C4 10 10 4 20 4C20 14 14 20 4 20Z" />
+            <path
+              d="M5 19C9 15 15 9 19 5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            />
+          </svg>
         </div>
+        <div className="decor-leaves delay-1 absolute top-40 left-16 text-primary opacity-30">
+          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M4 20C4 10 10 4 20 4C20 14 14 20 4 20Z" />
+            <path
+              d="M5 19C9 15 15 9 19 5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            />
+          </svg>
+        </div>
+        <div className="decor-leaves delay-2 absolute bottom-24 right-16 text-secondary opacity-40">
+          <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M4 20C4 10 10 4 20 4C20 14 14 20 4 20Z" />
+            <path
+              d="M5 19C9 15 15 9 19 5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            />
+          </svg>
+        </div>
+
+        {/* Seasonal Label */}
+        <SeasonLabel />
       </section>
 
      

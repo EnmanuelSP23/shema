@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 :root {
+  /* Brand anchors — unchanged in every season */
   --background: #FFD1DC;
   --foreground: #4A0E2E;
   --primary: #8B1A4A;
@@ -9,6 +10,28 @@
   --white: #FFFFFF;
   --light-pink: #FFE4EC;
   --dark-rose: #6B0F3A;
+
+  /* Surface ramp — summer defaults (exact Tailwind pink-50..300 values) */
+  --surface-0: oklch(97.1% 0.014 343.198);
+  --surface-1: oklch(94.8% 0.028 342.258);
+  --surface-2: oklch(89.9% 0.061 343.231);
+  --surface-3: oklch(82.3% 0.12 346.018);
+}
+
+/* Fall palette — active Sep–Nov (set by the inline season script in layout.tsx) */
+:root[data-season="fall"] {
+  --background: #FBEEE1;
+  --foreground: #4A0E2E;
+  --primary: #8B1A4A;
+  --secondary: #C97B5E;
+  --accent: #A85A3C;
+  --light-pink: #F8E5D6;
+  --dark-rose: #6B0F3A;
+
+  --surface-0: #FDF7F0;
+  --surface-1: #FAECDD;
+  --surface-2: #F5DCC8;
+  --surface-3: #E9C4A6;
 }
 
 @theme inline {
@@ -20,6 +43,10 @@
   --color-white: var(--white);
   --color-light-pink: var(--light-pink);
   --color-dark-rose: var(--dark-rose);
+  --color-pink-50: var(--surface-0);
+  --color-pink-100: var(--surface-1);
+  --color-pink-200: var(--surface-2);
+  --color-pink-300: var(--surface-3);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -28,4 +55,41 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Seasonal hero decor — stars in summer, leaves in fall */
+.decor-leaves {
+  display: none;
+}
+
+[data-season="fall"] .decor-stars {
+  display: none;
+}
+
+[data-season="fall"] .decor-leaves {
+  display: block;
+  animation: leaf-sway 6s ease-in-out infinite alternate;
+}
+
+[data-season="fall"] .decor-leaves.delay-1 {
+  animation-delay: -2s;
+}
+
+[data-season="fall"] .decor-leaves.delay-2 {
+  animation-delay: -4s;
+}
+
+@keyframes leaf-sway {
+  from {
+    transform: rotate(-8deg) translateY(0);
+  }
+  to {
+    transform: rotate(8deg) translateY(-6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-season="fall"] .decor-leaves {
+    animation: none;
+  }
 }
