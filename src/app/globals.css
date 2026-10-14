@@ -57,6 +57,82 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Homepage-only welcome; its session state is managed by FloralWelcome. */
+.floral-welcome {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(12px, 3vh, 28px);
+  overflow: auto;
+  padding: 24px 16px;
+  min-height: 100svh;
+  color: var(--primary);
+  background: radial-gradient(ellipse at 50% 52%, #e8d6f2 0%, var(--surface-0) 65%);
+  animation: welcome-fade-in 350ms ease both;
+  transition: opacity 450ms ease;
+}
+
+.floral-welcome-copy { text-align: center; animation: welcome-rise 900ms ease both; }
+.floral-welcome-eyebrow { font-size: 10px; letter-spacing: 0.35em; }
+.floral-welcome-copy h1 { font-size: clamp(32px, 6vw, 52px); font-weight: 900; letter-spacing: 0.16em; margin: 4px 0; }
+.floral-welcome-copy > p:last-child { font-family: Georgia, serif; font-style: italic; font-size: 16px; }
+
+.floral-welcome-bloom {
+  position: relative;
+  flex-shrink: 0;
+  width: min(92vw, 56svh, 560px);
+  animation: welcome-bloom 1400ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  transition: transform 950ms cubic-bezier(0.4, 0, 0.2, 1), opacity 900ms ease;
+}
+
+.floral-welcome-float { animation: welcome-float 6s 1400ms ease-in-out infinite; }
+.floral-welcome-flower { width: 100%; height: auto; filter: drop-shadow(0 24px 28px #45235e30); }
+.floral-welcome-button {
+  position: absolute;
+  top: 55%;
+  left: 55%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
+  padding: 16px 26px;
+  border: 1px solid #ffffffa6;
+  border-radius: 999px;
+  background: #fff8f2f5;
+  box-shadow: 0 8px 32px #32124335;
+  color: var(--dark-rose);
+  font-size: clamp(16px, 3vw, 20px);
+  font-weight: 700;
+  text-decoration: none;
+  transition: background 200ms, box-shadow 200ms;
+  animation: welcome-fade-in 650ms 650ms both;
+}
+.floral-welcome-button:hover { background: white; box-shadow: 0 12px 40px #32124350; }
+.floral-welcome-button:focus-visible { outline: 3px solid var(--primary); outline-offset: 6px; }
+.floral-welcome-button-en { font-size: 11px; font-weight: 400; letter-spacing: 0.08em; }
+.floral-welcome-note { font-size: 10px; letter-spacing: 0.3em; text-align: center; animation: welcome-fade-in 900ms 700ms both; }
+.floral-welcome[data-phase="leaving"] { opacity: 0; transition-delay: 450ms; }
+.floral-welcome[data-phase="leaving"] .floral-welcome-bloom { animation: none; transform: scale(3) rotate(12deg); opacity: 0; }
+.floral-welcome[data-phase="leaving"] .floral-welcome-button { visibility: hidden; }
+
+@keyframes welcome-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes welcome-rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes welcome-bloom { from { opacity: 0; transform: scale(0.55) rotate(-14deg); } to { opacity: 1; transform: scale(1) rotate(0); } }
+@keyframes welcome-float { 0%, 100% { transform: translateY(0) rotate(-1deg); } 50% { transform: translateY(-8px) rotate(1deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .floral-welcome,
+  .floral-welcome * { animation: none !important; transition: opacity 100ms ease !important; }
+  .floral-welcome[data-phase="leaving"] { transition-delay: 0ms; }
+  .floral-welcome[data-phase="leaving"] .floral-welcome-bloom { transform: none; }
+}
+
 /* Seasonal hero decor — stars in summer, leaves in fall */
 .decor-leaves {
   display: none;

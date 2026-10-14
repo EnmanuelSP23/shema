@@ -42,6 +42,7 @@ export default async function Home() {
                 src="/products/sehma.jpg"
                 alt="SHEMA Makeup Collection"
                 fill
+                sizes="(max-width: 767px) calc(100vw - 32px), 50vw"
                 className="object-cover rounded-3xl shadow-2xl"
                 priority
               />

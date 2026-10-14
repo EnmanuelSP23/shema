@@ -1,0 +1,7 @@
+Welcome pansy image
+Author: Rosendahl
+Source: https://commons.wikimedia.org/wiki/File:Purple_pansy_flower.jpg
+Original: https://upload.wikimedia.org/wikipedia/commons/e/e9/Purple_pansy_flower.jpg
+License: Public domain (PD-author), as stated on the source page.
+Modifications: Flower silhouette isolated with a hand-traced alpha mask,
+cropped, resized, and converted to WebP for the SHEMA welcome animation.

@@ -20,6 +20,7 @@ export default function ProductCard({ product }: ProductCardProps) {
               src={product.image}
               alt={product.name}
               fill
+              sizes="(max-width: 767px) calc(100vw - 32px), 50vw"
               className="object-contain p-2"
             />
           </div>

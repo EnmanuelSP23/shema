@@ -4,6 +4,7 @@ import "./globals.css";
 import { CartProvider } from "@/hooks/useCart";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import FloralWelcome from "@/components/FloralWelcome";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,9 +35,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
         <CartProvider>
-          <Header />
-          <main className="flex-grow">{children}</main>
-          <Footer />
+          <div id="site-content" className="flex flex-col flex-grow">
+            <Header />
+            <main className="flex-grow">{children}</main>
+            <Footer />
+          </div>
+          <FloralWelcome />
         </CartProvider>
       </body>
     </html>
