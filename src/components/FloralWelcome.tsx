@@ -115,7 +115,23 @@ export default function FloralWelcome() {
           }}
         >
           <span lang="es">Ver catálogo</span>
-          <span className="floral-welcome-button-en">Open Catalog <span aria-hidden="true">↗</span></span>
+          <span className="floral-welcome-button-en">
+            Open Catalog{" "}
+            <svg
+              aria-hidden="true"
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              className="inline-block align-middle"
+            >
+              <path d="M7 17 17 7M7 7h10v10" />
+            </svg>
+          </span>
         </Link>
       </div>
 
