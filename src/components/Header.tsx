@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import HomeLink from "@/components/HomeLink";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -10,14 +11,14 @@ export default function Header() {
     <header className="bg-pink-200 text-primary sticky top-0 z-50 shadow-sm border-b border-pink-300">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-12">
-          <Link href="/" className="text-2xl font-bold tracking-wider">
+          <HomeLink className="text-2xl font-bold tracking-wider">
             SHEMA
-          </Link>
+          </HomeLink>
 
           <nav className="hidden md:flex space-x-8">
-            <Link href="/" className="hover:text-accent transition-colors">
+            <HomeLink className="hover:text-accent transition-colors">
               Home
-            </Link>
+            </HomeLink>
             <Link href="/products" className="hover:text-accent transition-colors">
               Products
             </Link>
@@ -51,13 +52,12 @@ export default function Header() {
 
         {isMenuOpen && (
           <nav className="md:hidden py-4 border-t border-pink-300">
-            <Link
-              href="/"
+            <HomeLink
               className="block py-2 hover:text-accent transition-colors"
               onClick={() => setIsMenuOpen(false)}
             >
               Home
-            </Link>
+            </HomeLink>
             <Link
               href="/products"
               className="block py-2 hover:text-accent transition-colors"

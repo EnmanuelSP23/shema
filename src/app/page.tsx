@@ -1,155 +1,147 @@
 import Image from "next/image";
 import Link from "next/link";
 import ProductCard from "@/components/ProductCard";
-import SeasonLabel from "@/components/SeasonLabel";
 import { getProducts } from "@/lib/products";
+import { Product } from "@/types";
+
+function Arrow() {
+  return (
+    <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M5 12h14m-6-6 6 6-6 6" />
+    </svg>
+  );
+}
+
+function findInCategories(products: Product[], categories: string[]) {
+  for (const category of categories) {
+    const product = products.find((item) => item.category.toLowerCase() === category.toLowerCase());
+    if (product) return product;
+  }
+}
 
 export default async function Home() {
   const products = await getProducts();
-  const featuredProducts = products.slice(0, 6);
+  const moods = [
+    {
+      title: "Everyday essentials",
+      description: "The little things that make a look feel like you.",
+      cta: "Explore essentials",
+      product: findInCategories(products, ["Lip Care", "Mascara", "Eyeliner", "Lip Stain"]),
+      fallbackImage: "/products/3.jpg",
+      className: "home-mood-essentials",
+    },
+    {
+      title: "A little glow",
+      description: "A touch of color. A little extra confidence.",
+      cta: "Find your glow",
+      product: findInCategories(products, ["Blush", "Lip Gloss", "Contour", "Gift Set"]),
+      fallbackImage: "/products/3.jpg",
+      className: "home-mood-glow",
+    },
+    {
+      title: "Your signature scent",
+      description: "Find the fragrance that feels unmistakably yours.",
+      cta: "Find your scent",
+      product: findInCategories(products, ["Fragrance", "Body Fragrance", "Body Fragance", "Fragance", "Body Care"]),
+      fallbackImage: "/products/amber1.jpg",
+      className: "home-mood-scent",
+    },
+  ];
+  const featuredProducts = [...new Map([
+    ...moods.flatMap((mood) => mood.product ? [mood.product] : []),
+    ...products,
+  ].map((product) => [product.id, product])).values()].slice(0, 3);
+  const heroProduct = moods[1].product ?? featuredProducts[0];
+  const heroCompanion = moods[2].product ?? featuredProducts.find((product) => product.id !== heroProduct?.id);
 
   return (
-    <div>
-      {/* Hero Section - Catalog Cover Style */}
-      <section className="relative bg-gradient-to-b from-pink-200 to-pink-100 py-12">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            <div className="md:w-1/2 mb-10 md:mb-0 text-center md:text-left">
-              <h1 className="text-5xl md:text-7xl font-black text-primary mb-4 tracking-tight">
-                SHEMA
-              </h1>
-              <p className="text-2xl md:text-3xl text-primary font-bold mb-6 uppercase">
-                Makeup Collection
-              </p>
-              
-              <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                <Link
-                  href="/products"
-                  className="bg-primary text-white px-8 py-3 rounded-full font-bold hover:bg-dark-rose transition-colors text-center"
-                >
-                  Shop Now
-                </Link>
-                <Link
-                  href="/contact"
-                  className="border-2 border-primary text-primary px-8 py-3 rounded-full font-bold hover:bg-primary hover:text-white transition-colors text-center"
-                >
-                  Contact Us
-                </Link>
+    <div className="editorial-home">
+      <section className="home-hero" aria-labelledby="home-hero-title">
+        <div className="home-hero-inner">
+          <div className="home-hero-copy">
+            <p className="boutique-eyebrow">SHEMA · MAKEUP COLLECTION</p>
+            <h1 id="home-hero-title">Your look,<br /><em>your rules.</em></h1>
+            <p className="home-hero-description">Beauty is personal. Discover makeup, body care, and little luxuries to make every day your own.</p>
+            <Link href="/products" className="home-button">Explore the collection <Arrow /></Link>
+            <p className="home-hero-footnote">A little color. A little confidence. A lot of you.</p>
+          </div>
+
+          <div className="home-hero-gallery">
+            <span className="home-gallery-halo" aria-hidden="true" />
+            <Link href={heroProduct ? `/products/${heroProduct.id}` : "/products"} className="home-hero-photo home-hero-photo-main">
+              <div className="home-hero-photo-image">
+                {/* Request extra source pixels for the portrait crop of wide product photos. */}
+                <Image src={heroProduct?.image || "/products/3.jpg"} alt={heroProduct?.name ?? "Discover the SHEMA makeup collection"} fill sizes="(max-width: 767px) 180vw, (max-width: 1200px) 85vw, 1024px" loading="eager" className="object-contain" />
               </div>
-            </div>
-            <div className="md:w-1/2 relative h-48 md:h-[420px]">
-              <Image
-                src="/products/sehma.jpg"
-                alt="SHEMA Makeup Collection"
-                fill
-                sizes="(max-width: 767px) calc(100vw - 32px), 50vw"
-                className="object-cover rounded-3xl shadow-2xl"
-                priority
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Decorative Elements - Stars (summer) / Leaves (fall) */}
-        <div className="decor-stars absolute top-10 left-10 text-primary opacity-30">
-          <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-          </svg>
-        </div>
-        <div className="decor-stars absolute top-20 right-20 text-primary opacity-30">
-          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-          </svg>
-        </div>
-        <div className="decor-stars absolute bottom-20 left-20 text-primary opacity-30">
-          <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-          </svg>
-        </div>
-        <div className="decor-leaves absolute top-12 right-24 text-accent opacity-40">
-          <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M4 20C4 10 10 4 20 4C20 14 14 20 4 20Z" />
-            <path
-              d="M5 19C9 15 15 9 19 5"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-            />
-          </svg>
-        </div>
-        <div className="decor-leaves delay-1 absolute top-40 left-16 text-primary opacity-30">
-          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M4 20C4 10 10 4 20 4C20 14 14 20 4 20Z" />
-            <path
-              d="M5 19C9 15 15 9 19 5"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-            />
-          </svg>
-        </div>
-        <div className="decor-leaves delay-2 absolute bottom-24 right-16 text-secondary opacity-40">
-          <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M4 20C4 10 10 4 20 4C20 14 14 20 4 20Z" />
-            <path
-              d="M5 19C9 15 15 9 19 5"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="1.5"
-            />
-          </svg>
-        </div>
-
-        {/* Seasonal Label */}
-        <SeasonLabel />
-      </section>
-
-     
-
-      {/* Featured Products */}
-      <section className="py-8 bg-pink-50">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-6">
-            <h2 className="text-3xl font-bold text-primary mb-4 uppercase">
-              Featured Products
-            </h2>
-            <p className="text-primary max-w-2xl mx-auto">
-              Explore our handpicked selection of premium makeup and beauty products.
-            </p>
-          </div>
-
-          <div className="space-y-0">
-            {featuredProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-
-          <div className="text-center mt-8">
-            <Link
-              href="/products"
-              className="inline-block bg-primary text-white px-8 py-3 rounded-full font-bold hover:bg-dark-rose transition-colors"
-            >
-              View All Products
+              <span>{heroProduct?.brand ?? "A little glow"}</span>
             </Link>
+            <Link href={heroCompanion ? `/products/${heroCompanion.id}` : "/products"} className="home-hero-photo home-hero-photo-small">
+              <div className="home-hero-photo-image">
+                <Image src={heroCompanion?.image || "/products/amber1.jpg"} alt={heroCompanion?.name ?? "Explore fragrance at SHEMA"} fill sizes="(max-width: 767px) 40vw, (max-width: 1200px) 18vw, 215px" className="object-contain" />
+              </div>
+              <span>A new favorite awaits.</span>
+            </Link>
+            <p className="home-gallery-caption">The beauty of a little discovery.</p>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-8 bg-primary text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-4 uppercase">Multiply Your Beauty</h2>
-          <p className="text-lg mb-6 max-w-2xl mx-auto">
-            Join thousands of satisfied customers who trust SHEMA for their beauty needs.
-            Shop now and discover the difference!
-          </p>
-          <Link
-            href="/products"
-            className="inline-block bg-white text-primary px-8 py-3 rounded-full font-bold hover:bg-pink-100 transition-colors"
-          >
-            Start Shopping
-          </Link>
+      <section className="home-section home-moods" aria-labelledby="home-moods-title">
+        <div className="home-section-heading">
+          <p className="boutique-eyebrow">A LITTLE SOMETHING FOR EVERY YOU</p>
+          <h2 id="home-moods-title">Shop by <em>mood.</em></h2>
+          <p>Follow your feeling. Find your favorite.</p>
         </div>
+        <div className="home-mood-grid">
+          {moods.map((mood, index) => (
+            <Link key={mood.title} href={mood.product ? `/products?category=${encodeURIComponent(mood.product.category)}` : "/products"} className={`home-mood-card ${mood.className}`}>
+              <div className="home-mood-image">
+                <span className="home-mood-number" aria-hidden="true">0{index + 1}</span>
+                <Image src={mood.product?.image || mood.fallbackImage} alt="" fill sizes="(max-width: 767px) calc(100vw - 72px), (max-width: 1200px) 30vw, 360px" className="object-contain" />
+              </div>
+              <div className="home-mood-copy">
+                <h3>{mood.title}</h3>
+                <p>{mood.description}</p>
+                <span>{mood.cta} <Arrow /></span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {featuredProducts.length > 0 && (
+        <section className="home-section home-edit" aria-labelledby="home-edit-title">
+          <div className="home-section-heading">
+            <p className="boutique-eyebrow">THREE LOVELY PLACES TO START</p>
+            <h2 id="home-edit-title">The SHEMA <em>Edit.</em></h2>
+            <p>A few favorites from our collection, picked for your next beauty ritual.</p>
+          </div>
+          <div className="home-featured-grid">
+            {featuredProducts.map((product) => <ProductCard key={product.id} product={product} />)}
+          </div>
+          <div className="home-section-action"><Link href="/products" className="home-text-link">See the full collection <Arrow /></Link></div>
+        </section>
+      )}
+
+      <section className="home-about" aria-labelledby="home-about-title">
+        <div className="home-about-inner">
+          <div className="home-about-intro">
+            <p className="boutique-eyebrow">A LITTLE NOTE FROM SHEMA</p>
+            <h2 id="home-about-title">For the everyday.<br /><em>And the just because.</em></h2>
+          </div>
+          <div className="home-about-copy">
+            <p>Sometimes it’s a new lip color. Sometimes it’s a scent that feels like you. SHEMA brings together makeup, body care, and accessories for those little moments of self-expression.</p>
+            <p>Not sure where to start? We’d love to help you find something lovely.</p>
+            <Link href="/contact" className="home-text-link">Let’s find your next favorite <Arrow /></Link>
+            <span className="home-about-signature">With love, SHEMA.</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="home-closing" aria-labelledby="home-closing-title">
+        <p className="boutique-eyebrow">MAKE A LITTLE ROOM FOR YOU</p>
+        <h2 id="home-closing-title">Find something that<br /><em>feels like you.</em></h2>
+        <Link href="/products" className="home-button">Find your favorite <Arrow /></Link>
       </section>
     </div>
   );

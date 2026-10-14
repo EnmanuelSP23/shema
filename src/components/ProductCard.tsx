@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useRef, useState } from "react";
 import { Product } from "@/types";
 
 interface ProductCardProps {
@@ -9,50 +10,74 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
+  const cardRef = useRef<HTMLElement>(null);
+  const [revealed, setRevealed] = useState(false);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    const card = cardRef.current;
+    if (!card) return;
+    if (!("IntersectionObserver" in window)) {
+      const frame = requestAnimationFrame(() => setRevealed(true));
+      return () => cancelAnimationFrame(frame);
+    }
+    const observer = new IntersectionObserver(([entry]) => {
+      setInView(entry.isIntersecting);
+      if (entry.isIntersecting) setRevealed(true);
+    }, { threshold: 0.08 });
+    observer.observe(card);
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <div className="bg-pink-200 overflow-hidden border-b border-pink-300">
-      <Link href={`/products/${product.id}`}>
-        <div className="flex flex-col md:flex-row min-h-[280px] md:min-h-[380px]">
-          {/* Product Image - Left Side */}
-          <div className="w-full md:w-1/2 h-80 md:h-auto relative bg-pink-100 flex items-center justify-center">
+    <article
+      ref={cardRef}
+      className="boutique-card"
+      data-revealed={revealed}
+      data-in-view={inView}
+    >
+      <Link href={`/products/${product.id}`} className="boutique-card-link">
+        <div className="boutique-card-stage">
+          <div className="boutique-card-image">
             <Image
               src={product.image}
               alt={product.name}
               fill
-              sizes="(max-width: 767px) calc(100vw - 32px), 50vw"
-              className="object-contain p-2"
+              sizes="(max-width: 767px) calc(100vw - 96px), (max-width: 1152px) 50vw, 560px"
+              className="object-contain p-3 md:p-5"
             />
           </div>
+          <span className="boutique-flower boutique-flower-first" aria-hidden="true">
+            <Image src="/catalog-pansy.webp" alt="" width={240} height={226} unoptimized className="boutique-flower-image" />
+          </span>
+          <span className="boutique-flower boutique-flower-second" aria-hidden="true">
+            <Image src="/catalog-pansy.webp" alt="" width={240} height={226} unoptimized className="boutique-flower-image" />
+          </span>
+        </div>
 
-          {/* Product Details - Right Side */}
-          <div className="w-full md:w-1/2 p-5 md:p-10 flex flex-col justify-center bg-pink-200">
-            <p className="text-sm md:text-xl font-bold text-primary uppercase mb-1">
-              {product.brand}
-            </p>
-            <h3 className="text-base md:text-2xl font-bold text-primary mb-4 md:mb-6 leading-tight uppercase">
-              {product.name}
-            </h3>
+        <div className="boutique-card-details">
+          <p className="boutique-card-brand">{product.brand}</p>
+          <h3 className="boutique-card-name">{product.name}</h3>
+          <p className="boutique-card-category">{product.category}</p>
 
-            <div className="flex gap-6 md:gap-10 mb-4 md:mb-6">
-              <div>
-                <span className="block text-xs md:text-sm font-bold text-primary uppercase mb-1">SIZE</span>
-                <span className="text-sm md:text-base font-bold text-primary uppercase">{product.size}</span>
-              </div>
-              <div>
-                <span className="block text-xs md:text-sm font-bold text-primary uppercase mb-1">COLOR</span>
-                <span className="text-sm md:text-base font-bold text-primary uppercase">{product.color}</span>
-              </div>
-            </div>
+          {(product.size || product.color) && (
+            <dl className="boutique-card-specs">
+              {product.size && <div><dt>Size</dt><dd>{product.size}</dd></div>}
+              {product.color && <div><dt>Shade / Style</dt><dd>{product.color}</dd></div>}
+            </dl>
+          )}
 
-            <div>
-              <p className="text-lg md:text-2xl font-bold text-primary uppercase">
-                PRICE: ${product.price.toFixed(2)}
-              </p>
-            </div>
+          <div className="boutique-card-bottom">
+            <p className="boutique-card-price">${product.price.toFixed(2)} <span>USD</span></p>
+            <span className="boutique-card-cta">
+              View details
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14m-6-6 6 6-6 6" />
+              </svg>
+            </span>
           </div>
         </div>
       </Link>
-    </div>
+    </article>
   );
 }

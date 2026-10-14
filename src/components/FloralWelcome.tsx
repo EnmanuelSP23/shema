@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { FLORAL_WELCOME_EVENT } from "@/components/HomeLink";
 
 const SESSION_KEY = "shema-floral-welcome-opened";
 let seenInMemory = false;
@@ -14,6 +15,20 @@ export default function FloralWelcome() {
   const [phase, setPhase] = useState<"hidden" | "welcome" | "leaving">("hidden");
   const buttonRef = useRef<HTMLAnchorElement>(null);
   const navigationTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const replayRequested = useRef(false);
+
+  useEffect(() => {
+    function replayWelcome() {
+      if (pathname === "/") {
+        setPhase("welcome");
+        router.prefetch("/products");
+      } else {
+        replayRequested.current = true;
+      }
+    }
+    window.addEventListener(FLORAL_WELCOME_EVENT, replayWelcome);
+    return () => window.removeEventListener(FLORAL_WELCOME_EVENT, replayWelcome);
+  }, [pathname, router]);
 
   useEffect(() => {
     if (pathname !== "/") {
@@ -28,7 +43,8 @@ export default function FloralWelcome() {
       } catch {
         // Keep navigation working even when browser storage is blocked.
       }
-      if (seen) return;
+      if (seen && !replayRequested.current) return;
+      replayRequested.current = false;
       setPhase("welcome");
       router.prefetch("/products");
     });

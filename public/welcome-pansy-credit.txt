@@ -5,3 +5,5 @@ Original: https://upload.wikimedia.org/wikipedia/commons/e/e9/Purple_pansy_flowe
 License: Public domain (PD-author), as stated on the source page.
 Modifications: Flower silhouette isolated with a hand-traced alpha mask,
 cropped, resized, and converted to WebP for the SHEMA welcome animation.
+catalog-pansy.webp is a smaller 240px version of the same cutout for decorative
+product-card corners. It shares the source and public-domain license above.

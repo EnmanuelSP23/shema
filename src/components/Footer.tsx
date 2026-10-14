@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { socialLinks } from "@/lib/config";
+import HomeLink from "@/components/HomeLink";
 
 export default function Footer() {
   return (
@@ -18,9 +19,9 @@ export default function Footer() {
             <h4 className="font-semibold mb-4">Quick Links</h4>
             <ul className="space-y-2">
               <li>
-                <Link href="/" className="hover:text-accent transition-colors">
+                <HomeLink className="hover:text-accent transition-colors">
                   Home
-                </Link>
+                </HomeLink>
               </li>
               <li>
                 <Link href="/products" className="hover:text-accent transition-colors">

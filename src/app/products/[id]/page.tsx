@@ -9,6 +9,7 @@ import { supabase } from "@/lib/supabase";
 import { getProductImages } from "@/lib/products";
 import { socialLinks } from "@/lib/config";
 import ProductCard from "@/components/ProductCard";
+import HomeLink from "@/components/HomeLink";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -92,9 +93,9 @@ export default function ProductDetailPage() {
         <nav className="mb-6">
           <ol className="flex items-center space-x-2 text-xs text-primary">
             <li>
-              <Link href="/" className="hover:text-dark-rose">
+              <HomeLink className="hover:text-dark-rose">
                 Home
-              </Link>
+              </HomeLink>
             </li>
             <li>/</li>
             <li>
@@ -117,6 +118,7 @@ export default function ProductDetailPage() {
                   src={currentImage}
                   alt={product.name}
                   fill
+                  sizes="(max-width: 767px) calc(100vw - 32px), 50vw"
                   className="object-contain p-4"
                   priority
                 />
@@ -216,7 +218,7 @@ export default function ProductDetailPage() {
             <h2 className="text-2xl font-bold text-primary mb-6 uppercase">
               Related Products
             </h2>
-            <div className="space-y-0">
+            <div className="boutique-product-list">
               {relatedProducts.map((p) => (
                 <ProductCard key={p.id} product={p} />
               ))}
